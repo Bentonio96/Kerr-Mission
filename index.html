@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#04050A" />
+    <meta name="color-scheme" content="dark light" />
+
+    <title>Kerr — Misión tripulada a un agujero negro en rotación</title>
+    <meta
+      name="description"
+      content="Kerr, una misión ficticia de cinco personas hacia Nadir, un agujero negro que gira al 94 % del límite. Lente gravitacional en tiempo real, telemetría con física real y un scroll que cruza el horizonte de sucesos. Pieza de portafolio."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href="https://kerr-mission.vercel.app/" />
+    <link rel="preload" href="/poster.webp" as="image" type="image/webp" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Kerr — Misión tripulada a un agujero negro en rotación" />
+    <meta
+      property="og:description"
+      content="Cinco personas, una nave y un agujero negro de diez millones de soles. Una misión ficticia con física real, en tiempo real."
+    />
+    <meta property="og:image" content="https://kerr-mission.vercel.app/og.jpg" />
+    <meta property="og:url" content="https://kerr-mission.vercel.app/" />
+    <meta property="og:locale" content="es_CL" />
+    <meta property="og:locale:alternate" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script>
+      // ?reduced=1 must stop the CSS entrance too, before first paint.
+      if (/[?&]reduced=(1|true)/.test(location.search))
+        document.documentElement.dataset.reduced = ''
+    </script>
+  </head>
+  <body class="grano">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

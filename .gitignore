@@ -1,0 +1,9 @@
+node_modules
+dist
+dist-server
+*.local
+.DS_Store
+.vercel
+.lighthouse
+.claude
+scripts/.*.mjs
