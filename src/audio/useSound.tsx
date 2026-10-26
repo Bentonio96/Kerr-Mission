@@ -41,6 +41,7 @@ export function SoundProvider({ children }: { children: ReactNode }) {
       v.update({
         proximity: Math.max(proximity, diveAt(t)),
         warp: warpAt(t),
+        dive: diveAt(t),
         beyond,
         dilation: telemetry(t).dilation,
         // The ostinato enters with the ergosphere and runs to the horizon.
