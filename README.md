@@ -52,13 +52,14 @@ formulas are not.
 Around it: a HUD with live telemetry and a radar of the ship against the
 horizon, the photon orbit and the ergosphere; a chapter rail; a custom
 cursor; magnetic buttons; and **an optional score**, synthesised live with
-Web Audio, original, in the spirit of the big space-organ film scores: organ
-pipes (additive partials) playing a slow progression through a synthetic
-hall and swelling on the way down; a clock tick whose spacing stretches with
-the time dilation on the HUD until it stops at the horizon; an ostinato that
-enters in the ergosphere and speeds up through the dive; a drone, a rumble
-and a rush of noise during the jump; then silence, and one bright chord on
-the other side. It only starts from its button, never on its own.
+Web Audio, original, in the spirit of the big space-organ film scores. The
+flight is a cathedral organ (additive ranks from a 16' pedal to mixtures,
+in a long synthetic nave) holding a pedal A under slow chords; a clock whose
+tick stretches with the time dilation on the HUD and stops at the horizon; a
+rocking two-note figure that enters in the ergosphere and speeds up through
+the dive; one long crescendo, cut dead at the crossing. The other side is
+calm: a choir of soft "ah" voices (detuned saws through vowel formants) on a
+wide major chord, and small bells far apart in a much longer hall. It only starts from its button, never on its own.
 
 ---
 
