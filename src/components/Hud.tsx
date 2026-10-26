@@ -29,7 +29,10 @@ function radarRadius(r: number): number {
 const RINGS = [
   { r: horizonRadius(A), cls: 'fill-black stroke-tinta/60' },
   { r: photonOrbitRadius(A), cls: 'fill-none stroke-acento/80' },
-  { r: ergosphereRadius(A), cls: 'fill-none stroke-instrumento/70 [stroke-dasharray:2_3]' },
+  {
+    r: ergosphereRadius(A),
+    cls: 'fill-none stroke-instrumento/70 [stroke-dasharray:2_3]',
+  },
   { r: iscoRadius(A) + 0.35, cls: 'fill-none stroke-tinta/25' },
   { r: 10, cls: 'fill-none stroke-tinta/15' },
   { r: 1e4, cls: 'fill-none stroke-tinta/10' },
@@ -67,27 +70,35 @@ export function Hud() {
     }
     let frame = 0
     let last: Telemetry | null = null
-    return mission.subscribe(({ t: mt, time }) => {
+    return mission.subscribe(({ t: mt, time, dt }) => {
       const box = root.current
       if (!box) return
       const visible = sceneOpacity(mt)
       box.style.opacity = String(visible)
       box.style.visibility = visible < 0.01 ? 'hidden' : ''
       box.style.setProperty('--d', String(diveAt(mt) ** 2))
-      // Text at 20 Hz is plenty, and spares layout.
-      if (frame++ % 3 !== 0 && last) return
+      // Text at 20 Hz is plenty, and spares layout. Still frames (dt 0, the
+      // reduced build) always update.
+      if (dt > 0 && frame++ % 3 !== 0 && last) return
       const l = langRef.current
       const data = telemetry(mt)
       last = data
       const lost = data.regime === 'beyond'
       set('distance', lost ? '—' : `${formatScientific(data.km, l)} km`)
       set('radius', lost ? '< r₊' : `r = ${formatScientific(data.r, l)} M`)
-      set('dilation', lost || !Number.isFinite(data.dilation) ? '∞' : `× ${formatScientific(data.dilation, l)}`)
+      set(
+        'dilation',
+        lost || !Number.isFinite(data.dilation)
+          ? '∞'
+          : `× ${formatScientific(data.dilation, l)}`,
+      )
       set(
         'dilationLine',
         !Number.isFinite(data.dilation)
           ? COPY.hud.infinite[l]
-          : fill(COPY.hud.dilationUnit[l], { x: formatScientific(data.dilation, l) }),
+          : fill(COPY.hud.dilationUnit[l], {
+              x: formatScientific(data.dilation, l),
+            }),
       )
       set('speed', speedText(data.speed, l))
       set('tidal', `${formatScientific(data.tidal, l)} g`)
@@ -95,7 +106,9 @@ export function Hud() {
       const q = sceneQuality()
       set(
         'render',
-        q ? `${formatNumber(q.scale, l, 2)}× · ${q.steps} · ${formatNumber(q.fps, l, 0)} fps` : '—',
+        q
+          ? `${formatNumber(q.scale, l, 2)}× · ${q.steps} · ${formatNumber(q.fps, l, 0)} fps`
+          : '—',
       )
       box.toggleAttribute('data-lost', lost)
       const dot = ship.current
@@ -118,15 +131,21 @@ export function Hud() {
     <aside
       ref={root}
       aria-label={t(COPY.hud.title)}
-      className="hud deforma pointer-events-none fixed inset-x-0 bottom-0 z-30 lg:inset-x-auto lg:right-6 lg:bottom-6 lg:w-[23rem]"
+      className={`hud deforma pointer-events-none fixed inset-x-0 bottom-0 z-30 transition-opacity duration-500 lg:inset-x-auto lg:right-6 lg:bottom-6 lg:w-[23rem] ${chapter === 1 ? 'lg:invisible lg:opacity-0' : ''}`}
     >
       <div className="vidrio border-x-0 border-b-0 px-4 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] lg:rounded-2xl lg:border lg:p-4">
         <div className="hidden items-center justify-between gap-3 lg:flex">
           <p className="etiqueta text-tenue">
-            {t(COPY.hud.phase)} <span className="text-tinta">0{chapter + 1} · {t(name)}</span>
+            {t(COPY.hud.phase)}{' '}
+            <span className="text-tinta">
+              0{chapter + 1} · {t(name)}
+            </span>
           </p>
           <span className="etiqueta flex items-center gap-1.5 text-instrumento">
-            <span aria-hidden="true" className="hud-pulso size-1.5 rounded-full bg-current" />
+            <span
+              aria-hidden="true"
+              className="hud-pulso size-1.5 rounded-full bg-current"
+            />
             <span ref={field('regime')}>{t(COPY.hud.regime.cruise)}</span>
           </span>
         </div>
@@ -138,10 +157,16 @@ export function Hud() {
                 <span className="lg:hidden">{t(COPY.hud.distanceShort)}</span>
                 <span className="hidden lg:inline">{t(COPY.hud.distance)}</span>
               </dt>
-              <dd className="cifra estrecha text-[0.75rem] text-tinta lg:text-sm" ref={field('distance')}>
+              <dd
+                className="cifra estrecha text-[0.6875rem] sm:text-[0.75rem] text-tinta lg:text-sm"
+                ref={field('distance')}
+              >
                 —
               </dd>
-              <dd className="cifra hidden text-xs text-tenue lg:block" ref={field('radius')}>
+              <dd
+                className="cifra hidden text-xs text-tenue lg:block"
+                ref={field('radius')}
+              >
                 —
               </dd>
             </div>
@@ -150,10 +175,16 @@ export function Hud() {
                 <span className="lg:hidden">{t(COPY.hud.dilationShort)}</span>
                 <span className="hidden lg:inline">{t(COPY.hud.dilation)}</span>
               </dt>
-              <dd className="cifra estrecha text-[0.75rem] text-acento lg:text-sm" ref={field('dilation')}>
+              <dd
+                className="cifra estrecha text-[0.6875rem] sm:text-[0.75rem] text-acento lg:text-sm"
+                ref={field('dilation')}
+              >
                 —
               </dd>
-              <dd className="cifra hidden text-xs text-tenue lg:block" ref={field('dilationLine')}>
+              <dd
+                className="cifra hidden text-xs text-tenue lg:block"
+                ref={field('dilationLine')}
+              >
                 —
               </dd>
             </div>
@@ -162,7 +193,10 @@ export function Hud() {
                 <span className="lg:hidden">{t(COPY.hud.speedShort)}</span>
                 <span className="hidden lg:inline">{t(COPY.hud.speed)}</span>
               </dt>
-              <dd className="cifra estrecha text-[0.75rem] text-tinta lg:text-sm" ref={field('speed')}>
+              <dd
+                className="cifra estrecha text-[0.6875rem] sm:text-[0.75rem] text-tinta lg:text-sm"
+                ref={field('speed')}
+              >
                 —
               </dd>
             </div>
@@ -183,17 +217,42 @@ export function Hud() {
             {RINGS.slice()
               .reverse()
               .map(({ r, cls }) => (
-                <circle key={r} r={radarRadius(r)} className={`${cls} [stroke-width:0.8]`} />
+                <circle
+                  key={r}
+                  r={radarRadius(r)}
+                  className={`${cls} [stroke-width:0.8]`}
+                />
               ))}
-            <line x1={-RADAR} x2={RADAR} y1="0" y2="0" className="stroke-tinta/10 [stroke-width:0.5]" />
-            <line y1={-RADAR} y2={RADAR} x1="0" x2="0" className="stroke-tinta/10 [stroke-width:0.5]" />
-            <circle ref={ship} r="2.6" cx={RADAR} cy="0" className="fill-acento" />
+            <line
+              x1={-RADAR}
+              x2={RADAR}
+              y1="0"
+              y2="0"
+              className="stroke-tinta/10 [stroke-width:0.5]"
+            />
+            <line
+              y1={-RADAR}
+              y2={RADAR}
+              x1="0"
+              x2="0"
+              className="stroke-tinta/10 [stroke-width:0.5]"
+            />
+            <circle
+              ref={ship}
+              r="2.6"
+              cx={RADAR}
+              cy="0"
+              className="fill-acento"
+            />
           </svg>
         </div>
 
         <p className="mt-3 hidden justify-between gap-2 border-t border-linea pt-2.5 lg:flex">
           <span className="etiqueta text-tenue">
-            {t(COPY.hud.rs)} <span className="text-tinta">{formatScientific(RS_KM, lang)} km</span>
+            {t(COPY.hud.rs)}{' '}
+            <span className="text-tinta">
+              {formatScientific(RS_KM, lang)} km
+            </span>
           </span>
         </p>
         <p className="mt-1 hidden justify-between gap-2 lg:flex">
@@ -202,7 +261,10 @@ export function Hud() {
             —
           </span>
         </p>
-        <p className="hud-perdida etiqueta mt-2 hidden text-acento" aria-hidden="true">
+        <p
+          className="hud-perdida etiqueta mt-2 hidden text-acento"
+          aria-hidden="true"
+        >
           {t(COPY.hud.lost)}
         </p>
       </div>

@@ -332,7 +332,7 @@ html[data-reduced] .entrada > * {
 
 .deforma {
   --d: 0;
-  transform: scaleY(calc(1 + var(--d) * 0.35)) skewX(calc(var(--d) * -7deg));
+  transform: scaleY(calc(1 + var(--d) * 0.12)) skewX(calc(var(--d) * -7deg));
   transform-origin: 50% 100%;
   text-shadow:
     calc(var(--d) * -5px) 0 rgb(255 77 109 / calc(var(--d) * 0.9)),
@@ -400,7 +400,15 @@ html[data-reduced] .hud-pulso {
 .marca {
   background:
     radial-gradient(circle, #000 0 38%, transparent 40%),
-    conic-gradient(from 200deg, #ffd9a0, #ff8a3d, #6b2a10, #ff8a3d, #fff1d6, #ffd9a0);
+    conic-gradient(
+      from 200deg,
+      #ffd9a0,
+      #ff8a3d,
+      #6b2a10,
+      #ff8a3d,
+      #fff1d6,
+      #ffd9a0
+    );
   box-shadow: 0 0 14px rgb(255 160 80 / 0.45);
 }
 
@@ -428,4 +436,9 @@ html[data-reduced] .barra {
 /* The HUD's labels run condensed, so each reading keeps to one line. */
 .hud .etiqueta {
   font-variation-settings: 'wdth' 78;
+}
+
+/* Copy over the scene: a soft dark halo keeps it legible over the disk. */
+.sobre-escena {
+  text-shadow: 0 1px 14px rgb(2 2 6 / 0.85);
 }

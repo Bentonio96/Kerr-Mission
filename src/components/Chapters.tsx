@@ -1,4 +1,10 @@
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from 'react'
 import { COPY, type ChapterCopy, type Fact } from '../data/copy'
 import { useReducedMotion } from '../hooks/useMediaQuery'
 import { fill } from '../i18n/format'
@@ -48,9 +54,22 @@ function Chapter({
   useEffect(() => {
     const el = inner.current
     if (!el || reduced || flow) return
-    const check = () => setFits(el.scrollHeight <= window.innerHeight + 1)
+    // Content bottom-aligned in a flex column overflows upwards, where
+    // scrollHeight cannot see it: add up the children instead.
+    const check = () => {
+      const st = getComputedStyle(el)
+      const needed =
+        [...el.children].reduce(
+          (sum, child) => sum + (child as HTMLElement).offsetHeight,
+          0,
+        ) +
+        parseFloat(st.paddingTop) +
+        parseFloat(st.paddingBottom)
+      setFits(needed <= window.innerHeight + 1)
+    }
     const observer = new ResizeObserver(check)
     observer.observe(el)
+    for (const child of el.children) observer.observe(child)
     window.addEventListener('resize', check)
     return () => {
       observer.disconnect()
@@ -89,11 +108,19 @@ function Chapter({
       className={`relative z-10 ${className}`}
       style={pinned ? { height: `${screens * 100}svh` } : undefined}
     >
-      <div className={pinned ? 'sticky top-0 flex h-svh' : 'relative flex min-h-svh'}>
-        <div aria-hidden="true" className="velo pointer-events-none absolute inset-0" />
+      <div
+        className={
+          pinned ? 'sticky top-0 flex h-svh' : 'relative flex min-h-svh'
+        }
+      >
+        <div
+          aria-hidden="true"
+          className="velo pointer-events-none absolute inset-0"
+        />
         <div
           ref={inner}
-          className="relative mx-auto flex w-full max-w-[90rem] flex-col justify-end px-4 pt-20 pb-24 md:px-8 lg:justify-center lg:pt-24 lg:pb-20 xl:pl-52">
+          className={`sobre-escena relative mx-auto flex w-full max-w-[90rem] flex-col justify-end px-4 pt-20 pb-24 md:px-8 lg:justify-center lg:pt-24 lg:pb-20 xl:pl-52 ${flow ? '' : 'lg:pr-[26.5rem]'}`}
+        >
           {children}
         </div>
       </div>
@@ -113,25 +140,48 @@ function Kicker({ children }: { children: ReactNode }) {
 function Facts({ facts }: { facts: readonly Fact[] }) {
   const { t } = useLanguage()
   return (
-    <dl data-revela="" className="mt-6 grid max-w-2xl grid-cols-3 gap-2 md:mt-7 md:gap-3">
+    <dl
+      data-revela=""
+      className="mt-6 grid max-w-2xl grid-cols-3 gap-2 md:mt-7 md:gap-3"
+    >
       {facts.map((fact) => (
-        <div key={fact.label.es} className="vidrio flex flex-col-reverse justify-end rounded-xl px-2.5 py-2.5 md:px-4 md:py-3">
-          <dt className="etiqueta mt-1 text-[0.625rem] text-tenue md:text-[0.6875rem]">{t(fact.label)}</dt>
-          <dd className="cifra estrecha text-sm text-tinta md:text-lg">{t(fact.value)}</dd>
+        <div
+          key={fact.label.es}
+          className="vidrio flex flex-col-reverse justify-end rounded-xl px-2 py-2.5 md:px-4 md:py-3"
+        >
+          <dt className="etiqueta mt-1 text-[0.625rem] text-tenue md:text-[0.6875rem]">
+            {t(fact.label)}
+          </dt>
+          <dd className="cifra estrecha text-[0.8125rem] [overflow-wrap:normal] text-tinta sm:text-sm md:text-lg">
+            {t(fact.value)}
+          </dd>
         </div>
       ))}
     </dl>
   )
 }
 
-function Story({ id, copy, screens }: { id: string; copy: ChapterCopy; screens: number }) {
+function Story({
+  id,
+  copy,
+  screens,
+}: {
+  id: string
+  copy: ChapterCopy
+  screens: number
+}) {
   const { t } = useLanguage()
   return (
     <Chapter id={id} screens={screens}>
       <div className="max-w-2xl">
         <Kicker>{t(copy.kicker)}</Kicker>
         <div data-revela="">
-          <GlitchText as="h2" id={`${id}-titulo`} text={t(copy.title)} className="titulo mt-4 max-w-[16ch]" />
+          <GlitchText
+            as="h2"
+            id={`${id}-titulo`}
+            text={t(copy.title)}
+            className="titulo mt-4 max-w-[16ch]"
+          />
         </div>
         <p data-revela="" className="prosa mt-4 max-w-xl text-tinta/85 md:mt-5">
           {t(copy.lead)}
@@ -151,7 +201,10 @@ function MissionClock() {
     if (reduced) return
     const start = Date.now()
     setSeconds(0)
-    const timer = window.setInterval(() => setSeconds(Math.floor((Date.now() - start) / 1000)), 1000)
+    const timer = window.setInterval(
+      () => setSeconds(Math.floor((Date.now() - start) / 1000)),
+      1000,
+    )
     return () => window.clearInterval(timer)
   }, [reduced])
   if (seconds === null) return null
@@ -169,7 +222,10 @@ export function Launch() {
   return (
     <Chapter id="lanzamiento" screens={1.7}>
       <div className="entrada max-w-2xl">
-        <p className="etiqueta flex items-center gap-3 text-acento" style={{ '--i': 0 } as CSSProperties}>
+        <p
+          className="etiqueta flex items-center gap-3 text-acento"
+          style={{ '--i': 0 } as CSSProperties}
+        >
           <span aria-hidden="true" className="h-px w-8 bg-current" />
           {t(COPY.launch.kicker)}
         </p>
@@ -177,13 +233,19 @@ export function Launch() {
           <KineticTitle
             text={t(COPY.launch.title)}
             label={t(COPY.launch.titleLabel)}
-            className="mt-3 text-[clamp(4.5rem,15vw,11rem)] text-tinta"
+            className="mt-3 text-[clamp(3.75rem,min(15vw,14svh),11rem)] text-tinta"
           />
         </div>
-        <p className="prosa mt-4 max-w-xl text-tinta/85" style={{ '--i': 2 } as CSSProperties}>
+        <p
+          className="prosa mt-4 max-w-xl text-tinta/85"
+          style={{ '--i': 2 } as CSSProperties}
+        >
           {t(COPY.launch.lead)}
         </p>
-        <div className="mt-7 flex flex-wrap items-center gap-3" style={{ '--i': 3 } as CSSProperties}>
+        <div
+          className="mt-6 flex flex-wrap items-center gap-2.5 sm:mt-7 sm:gap-3"
+          style={{ '--i': 3 } as CSSProperties}
+        >
           <Magnetic>
             <a
               href="#salto"
@@ -191,7 +253,7 @@ export function Launch() {
                 event.preventDefault()
                 goTo('salto')
               }}
-              className="inline-flex min-h-12 items-center gap-3 rounded-full bg-acento px-6 font-medium text-[#120a02] no-underline shadow-[0_0_40px_-6px_var(--acento)] transition-transform hover:scale-[1.03]"
+              className="inline-flex min-h-12 items-center gap-3 rounded-full bg-acento px-5 font-medium sm:px-6 text-fondo no-underline shadow-[0_0_40px_-6px_var(--acento)] transition-transform hover:scale-[1.03]"
             >
               {t(COPY.launch.start)}
               <span aria-hidden="true">↓</span>
@@ -204,13 +266,21 @@ export function Launch() {
                 event.preventDefault()
                 goTo('tripulacion')
               }}
-              className="inline-flex min-h-12 items-center rounded-full border border-linea px-6 text-tinta no-underline transition-colors hover:border-acento hover:text-acento"
+              className="inline-flex min-h-12 items-center rounded-full border border-linea px-5 text-tinta sm:px-6 no-underline transition-colors hover:border-acento hover:text-acento"
             >
-              {t(COPY.launch.crew)}
+              <span className="sm:hidden" aria-hidden="true">
+                {t(COPY.launch.crewShort)}
+              </span>
+              <span className="sr-only sm:not-sr-only">
+                {t(COPY.launch.crew)}
+              </span>
             </a>
           </Magnetic>
         </div>
-        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2" style={{ '--i': 4 } as CSSProperties}>
+        <div
+          className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-1.5 sm:mt-8"
+          style={{ '--i': 4 } as CSSProperties}
+        >
           <MissionClock />
           <p className="etiqueta text-tenue">{t(COPY.launch.note)}</p>
         </div>
@@ -228,7 +298,12 @@ export function Crew() {
           <Kicker>{t(COPY.crew.kicker)}</Kicker>
         </div>
         <div data-revela="">
-          <GlitchText as="h2" id="tripulacion-titulo" text={t(COPY.crew.title)} className="titulo mt-4" />
+          <GlitchText
+            as="h2"
+            id="tripulacion-titulo"
+            text={t(COPY.crew.title)}
+            className="titulo mt-4"
+          />
         </div>
         <p data-revela="" className="prosa mx-auto mt-4 max-w-lg text-tinta/85">
           {t(COPY.crew.lead)}
@@ -273,19 +348,31 @@ export function Horizon() {
       if (d === last) return
       last = d
       box.current?.style.setProperty('--d', String(d))
-      shout.current?.style.setProperty('font-variation-settings', `'wght' ${Math.round(500 + d * 400)}, 'wdth' ${(60 + d * 90).toFixed(1)}`)
+      shout.current?.style.setProperty(
+        'font-variation-settings',
+        `'wght' ${Math.round(500 + d * 400)}, 'wdth' ${(60 + d * 90).toFixed(1)}`,
+      )
     })
   }, [reduced])
 
   const words = t(COPY.horizon.shout).split(' ')
-  const lines = lang === 'es' ? [words.slice(0, 2), words.slice(2, 3), words.slice(3)] : [words.slice(0, 2), words.slice(2, 4), words.slice(4)]
+  const lines =
+    lang === 'es'
+      ? [words.slice(0, 2), words.slice(2, 3), words.slice(3)]
+      : [words.slice(0, 2), words.slice(2, 4), words.slice(4)]
 
   return (
     <Chapter id="horizonte" screens={3}>
       <div ref={box} className="deforma max-w-2xl">
         <Kicker>{t(COPY.horizon.kicker)}</Kicker>
         <div data-revela="">
-          <GlitchText as="h2" id="horizonte-titulo" text={t(COPY.horizon.title)} className="titulo mt-4 max-w-[16ch]" every={[2500, 5000]} />
+          <GlitchText
+            as="h2"
+            id="horizonte-titulo"
+            text={t(COPY.horizon.title)}
+            className="titulo mt-4 max-w-[16ch]"
+            every={[2500, 5000]}
+          />
         </div>
         <p data-revela="" className="prosa mt-5 max-w-xl text-tinta/85">
           {t(COPY.horizon.lead)}
@@ -293,7 +380,7 @@ export function Horizon() {
         <p
           ref={shout}
           data-revela=""
-          className="mt-6 font-display text-[clamp(2rem,8.5vw,5.5rem)] leading-[0.95] text-acento uppercase [font-variation-settings:'wght'_500,'wdth'_60]"
+          className="mt-6 font-display text-[clamp(1.75rem,min(8.5vw,8svh),5.5rem)] leading-[0.95] text-acento uppercase [font-variation-settings:'wght'_500,'wdth'_60]"
         >
           {lines.map((line) => (
             <span key={line.join(' ')} className="block py-[0.04em]">
@@ -321,7 +408,12 @@ export function Beyond() {
             <span aria-hidden="true" className="h-px w-8 bg-current" />
             {t(b.kicker)}
           </p>
-          <GlitchText as="h2" id="mas-alla-titulo" text={t(b.title)} className="titulo mt-4" />
+          <GlitchText
+            as="h2"
+            id="mas-alla-titulo"
+            text={t(b.title)}
+            className="titulo mt-4"
+          />
           <p className="prosa mt-5 max-w-xl text-tinta/85">{t(b.lead)}</p>
         </div>
 
@@ -340,9 +432,14 @@ export function Beyond() {
         <h3 className="etiqueta mt-12 text-tenue">{t(b.physicsTitle)}</h3>
         <dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {b.physics.map((item) => (
-            <div key={item.label.es} className="rounded-xl border border-linea px-4 py-3">
+            <div
+              key={item.label.es}
+              className="rounded-xl border border-linea px-4 py-3"
+            >
               <dt className="etiqueta text-tenue">{t(item.label)}</dt>
-              <dd className="cifra mt-1.5 text-sm text-instrumento">{t(item.value)}</dd>
+              <dd className="cifra mt-1.5 text-sm text-instrumento">
+                {t(item.value)}
+              </dd>
             </div>
           ))}
         </dl>
@@ -370,7 +467,9 @@ export function Beyond() {
       <footer className="border-t border-linea">
         <div className="mx-auto flex max-w-[90rem] flex-wrap items-center justify-between gap-4 px-4 py-6 md:px-8 xl:pl-52">
           <p className="max-w-2xl text-sm text-tenue">{t(b.credit)}</p>
-          <p className="etiqueta text-tenue">{fill('KRR-01 · {year}', { year: 2026 })}</p>
+          <p className="etiqueta text-tenue">
+            {fill('KRR-01 · {year}', { year: 2026 })}
+          </p>
         </div>
       </footer>
     </section>

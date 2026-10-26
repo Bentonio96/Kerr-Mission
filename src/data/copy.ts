@@ -22,7 +22,7 @@ const same = (text: string): Localized => ({ es: text, en: text })
 
 export const COPY = {
   skip: { es: 'Saltar al contenido', en: 'Skip to content' },
-  home: { es: 'Kerr, volver al inicio', en: 'Kerr, back to the top' },
+  home: { es: ', volver al inicio', en: ', back to the top' },
   chapters: { es: 'Capítulos de la misión', en: 'Mission chapters' },
   language: { es: 'Idioma', en: 'Language' },
   soundOn: { es: 'Activar sonido', en: 'Turn sound on' },
@@ -39,7 +39,10 @@ export const COPY = {
     distanceShort: { es: 'Dist.', en: 'Dist.' },
     dilation: { es: 'Dilatación temporal', en: 'Time dilation' },
     dilationShort: { es: 'Tiempo', en: 'Time' },
-    dilationUnit: { es: '1 h a bordo = {x} h en la Tierra', en: '1 h aboard = {x} h on Earth' },
+    dilationUnit: {
+      es: '1 h a bordo = {x} h en la Tierra',
+      en: '1 h aboard = {x} h on Earth',
+    },
     speed: { es: 'Velocidad', en: 'Speed' },
     speedShort: { es: 'Vel.', en: 'Speed' },
     tidal: { es: 'Marea (cuerpo de 2 m)', en: 'Tidal stretch (2 m body)' },
@@ -50,7 +53,10 @@ export const COPY = {
       fall: { es: 'Caída libre', en: 'Free fall' },
       beyond: { es: 'Sin señal', en: 'No signal' },
     },
-    infinite: { es: '∞ · el reloj de la Tierra se detiene', en: '∞ · Earth’s clock stops' },
+    infinite: {
+      es: '∞ · el reloj de la Tierra se detiene',
+      en: '∞ · Earth’s clock stops',
+    },
     render: { es: 'Render', en: 'Render' },
     lost: { es: 'Señal perdida', en: 'Signal lost' },
     radar: {
@@ -75,6 +81,7 @@ export const COPY = {
     },
     start: { es: 'Iniciar descenso', en: 'Begin descent' },
     crew: { es: 'Conocer a la tripulación', en: 'Meet the crew' },
+    crewShort: { es: 'Tripulación', en: 'The crew' },
     note: {
       es: 'Misión ficticia. La física es real, simplificada.',
       en: 'A fictional mission. The physics is real, simplified.',
@@ -100,49 +107,88 @@ export const COPY = {
 
   warp: {
     kicker: { es: '03 · Salto', en: '03 · Jump' },
-    title: { es: 'El cielo se dobla hacia adelante', en: 'The sky folds forward' },
+    title: {
+      es: 'El cielo se dobla hacia adelante',
+      en: 'The sky folds forward',
+    },
     lead: {
       es: 'Cerca de la velocidad de la luz, las estrellas se amontonan delante de la nave y se vuelven azules: es la aberración relativista. Atrás, el universo enrojece y se apaga. El viaje dura 26 000 años para la Tierra y 26 para la tripulación.',
       en: 'Near light speed the stars crowd ahead of the ship and turn blue: relativistic aberration. Behind, the universe reddens and fades. The trip takes 26,000 years for Earth and 26 for the crew.',
     },
     facts: [
-      { value: same('0,9999995 c'), label: { es: 'Velocidad de crucero', en: 'Cruise speed' } },
-      { value: { es: 'γ = 1 000', en: 'γ = 1,000' }, label: { es: 'Factor de Lorentz', en: 'Lorentz factor' } },
-      { value: { es: '26 años', en: '26 years' }, label: { es: 'A bordo, de 26 000', en: 'Aboard, out of 26,000' } },
+      {
+        value: same('0,9999995 c'),
+        label: { es: 'Velocidad de crucero', en: 'Cruise speed' },
+      },
+      {
+        value: { es: 'γ = 1 000', en: 'γ = 1,000' },
+        label: { es: 'Factor de Lorentz', en: 'Lorentz factor' },
+      },
+      {
+        value: { es: '26 años', en: '26 years' },
+        label: { es: 'A bordo, de 26 000', en: 'Aboard, out of 26,000' },
+      },
     ],
   } satisfies ChapterCopy,
 
   approach: {
     kicker: { es: '04 · Aproximación', en: '04 · Approach' },
-    title: { es: 'Nadir aparece donde no hay nada', en: 'Nadir appears where there is nothing' },
+    title: {
+      es: 'Nadir aparece donde no hay nada',
+      en: 'Nadir appears where there is nothing',
+    },
     lead: {
       es: 'Un agujero negro no se ve: se ve lo que le hace a la luz. El disco aparece encima y debajo de la sombra, porque la luz de su cara oculta da la vuelta. El anillo fino que la abraza es luz que alcanzó a orbitar antes de escapar.',
       en: 'You cannot see a black hole: you see what it does to light. The disk shows above and below the shadow, because light from its far side bends around. The thin ring hugging it is light that orbited before it escaped.',
     },
     facts: [
-      { value: { es: '1,98 × 10⁷ km', en: '1.98 × 10⁷ km' }, label: { es: 'Horizonte de sucesos', en: 'Event horizon' } },
-      { value: { es: '2,10 × 10⁷ km', en: '2.10 × 10⁷ km' }, label: { es: 'Órbita de fotones', en: 'Photon orbit' } },
-      { value: { es: '~7 000 K', en: '~7,000 K' }, label: { es: 'Borde interno del disco', en: 'Inner edge of the disk' } },
+      {
+        value: { es: '1,98 × 10⁷ km', en: '1.98 × 10⁷ km' },
+        label: { es: 'Horizonte de sucesos', en: 'Event horizon' },
+      },
+      {
+        value: { es: '2,10 × 10⁷ km', en: '2.10 × 10⁷ km' },
+        label: { es: 'Órbita de fotones', en: 'Photon orbit' },
+      },
+      {
+        value: { es: '~7 000 K', en: '~7,000 K' },
+        label: { es: 'Borde interno del disco', en: 'Inner edge of the disk' },
+      },
     ],
   } satisfies ChapterCopy,
 
   ergosphere: {
     kicker: { es: '05 · Ergosfera', en: '05 · Ergosphere' },
-    title: { es: 'Donde quedarse quieto es imposible', en: 'Where standing still is impossible' },
+    title: {
+      es: 'Donde quedarse quieto es imposible',
+      en: 'Where standing still is impossible',
+    },
     lead: {
       es: 'Nadir arrastra el espacio con su giro. Dentro de la ergosfera nada puede quedarse fijo, ni la luz: todo gira con el agujero. El Umbral sostiene una órbita a 1,95 M, por dentro de la última órbita estable, con los motores encendidos.',
       en: 'Nadir drags space around with its spin. Inside the ergosphere nothing can stay put, not even light: everything turns with the hole. The Umbral holds an orbit at 1.95 M, inside the last stable orbit, with its engines burning.',
     },
     facts: [
-      { value: { es: '0,63 c', en: '0.63 c' }, label: { es: 'Velocidad orbital', en: 'Orbital speed' } },
-      { value: { es: '1 h = 3,45 h', en: '1 h = 3.45 h' }, label: { es: 'A bordo / en la Tierra', en: 'Aboard / on Earth' } },
-      { value: same('~30 min'), label: { es: 'Una vuelta del espacio', en: 'One turn of space itself' } },
+      {
+        value: { es: '0,63 c', en: '0.63 c' },
+        label: { es: 'Velocidad orbital', en: 'Orbital speed' },
+      },
+      {
+        value: { es: '1 h = 3,45 h', en: '1 h = 3.45 h' },
+        label: { es: 'A bordo / en la Tierra', en: 'Aboard / on Earth' },
+      },
+      {
+        value: same('~30 min'),
+        label: { es: 'Una vuelta del espacio', en: 'One turn of space itself' },
+      },
     ],
   } satisfies ChapterCopy,
 
   horizon: {
     kicker: { es: '06 · Horizonte', en: '06 · Horizon' },
-    title: { es: 'El horizonte no se siente', en: 'You don’t feel the horizon' },
+    title: {
+      es: 'El horizonte no se siente',
+      en: 'You don’t feel the horizon',
+    },
     lead: {
       es: 'Con diez millones de soles, la marea en el horizonte es de 0,00007 g: nadie se estira. Lo que cambia es el tiempo. Desde la Tierra, el Umbral se congela en el borde para siempre. A bordo, el cruce dura un instante.',
       en: 'With ten million suns, the tidal stretch at the horizon is 0.00007 g: nobody gets stretched. What changes is time. From Earth, the Umbral freezes at the edge forever. Aboard, the crossing takes an instant.',
@@ -159,17 +205,41 @@ export const COPY = {
     },
     logTitle: { es: 'Bitácora de la misión', en: 'Mission log' },
     log: [
-      { value: { es: '26 000', en: '26,000' }, label: { es: 'Años luz recorridos', en: 'Light years travelled' } },
+      {
+        value: { es: '26 000', en: '26,000' },
+        label: { es: 'Años luz recorridos', en: 'Light years travelled' },
+      },
       { value: same('26'), label: { es: 'Años a bordo', en: 'Years aboard' } },
-      { value: same('1,95 M'), label: { es: 'Órbita más baja', en: 'Lowest orbit' } },
-      { value: same('∞'), label: { es: 'Dilación en el horizonte', en: 'Dilation at the horizon' } },
+      {
+        value: same('1,95 M'),
+        label: { es: 'Órbita más baja', en: 'Lowest orbit' },
+      },
+      {
+        value: same('∞'),
+        label: {
+          es: 'Dilación en el horizonte',
+          en: 'Dilation at the horizon',
+        },
+      },
     ],
     physicsTitle: { es: 'Las fórmulas', en: 'The formulas' },
     physics: [
-      { value: same('r_s = 2GM/c²'), label: { es: 'Radio de Schwarzschild', en: 'Schwarzschild radius' } },
-      { value: same('r₊ = M + √(M² − a²)'), label: { es: 'Horizonte de Kerr', en: 'Kerr horizon' } },
-      { value: same('dt/dτ = γ/α'), label: { es: 'Dilatación temporal', en: 'Time dilation' } },
-      { value: same('Δa = 2GM·L/r³'), label: { es: 'Marea', en: 'Tidal stretch' } },
+      {
+        value: same('r_s = 2GM/c²'),
+        label: { es: 'Radio de Schwarzschild', en: 'Schwarzschild radius' },
+      },
+      {
+        value: same('r₊ = M + √(M² − a²)'),
+        label: { es: 'Horizonte de Kerr', en: 'Kerr horizon' },
+      },
+      {
+        value: same('dt/dτ = γ/α'),
+        label: { es: 'Dilatación temporal', en: 'Time dilation' },
+      },
+      {
+        value: same('Δa = 2GM·L/r³'),
+        label: { es: 'Marea', en: 'Tidal stretch' },
+      },
     ],
     again: { es: 'Volver a lanzar', en: 'Launch again' },
     source: { es: 'Código en GitHub', en: 'Source on GitHub' },

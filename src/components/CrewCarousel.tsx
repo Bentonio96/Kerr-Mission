@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from 'react'
 import { COPY } from '../data/copy'
 import { CREW } from '../data/crew'
 import { useReducedMotion } from '../hooks/useMediaQuery'
@@ -8,7 +14,9 @@ import { Magnetic } from './Magnetic'
 import { Portrait } from './Portrait'
 
 const COUNT = CREW.length
-const TALLEST = CREW.reduce((a, b) => (b.bio.es.length > a.bio.es.length ? b : a))
+const TALLEST = CREW.reduce((a, b) =>
+  b.bio.es.length > a.bio.es.length ? b : a,
+)
 
 /** Shortest signed distance from the active card, around the loop. */
 function offsetOf(i: number, active: number): number {
@@ -113,7 +121,10 @@ export function CrewCarousel() {
         className="relative mx-auto touch-pan-y select-none [perspective:1100px]"
       >
         {/* Sizes the stage to the tallest card, so nothing below overlaps. */}
-        <div aria-hidden="true" className="invisible mx-auto w-[min(17.5rem,72vw)]">
+        <div
+          aria-hidden="true"
+          className="invisible mx-auto w-[min(17.5rem,72vw)]"
+        >
           <Card member={TALLEST} />
         </div>
         {CREW.map((member, i) => {
@@ -134,7 +145,9 @@ export function CrewCarousel() {
                 transform: `translateX(-50%) translateX(${d * 58}%) translateZ(${-abs * 170}px) rotateY(${-d * 24}deg)`,
                 opacity: abs > 2.2 ? 0 : 1 - abs * 0.28,
                 zIndex: 10 - Math.round(abs * 2),
-                transition: drag ? 'none' : 'transform 700ms var(--ease-salida), opacity 700ms var(--ease-salida)',
+                transition: drag
+                  ? 'none'
+                  : 'transform 700ms var(--ease-salida), opacity 700ms var(--ease-salida)',
               }}
             >
               <Card member={member} />
@@ -154,7 +167,10 @@ export function CrewCarousel() {
             <span className="sr-only">{t(COPY.crew.prev)}</span>
           </button>
         </Magnetic>
-        <p className="etiqueta min-w-24 text-center text-tenue" aria-hidden="true">
+        <p
+          className="etiqueta min-w-24 text-center text-tenue"
+          aria-hidden="true"
+        >
           {fill(t(COPY.crew.of), { n: active + 1, total: COUNT })}
         </p>
         <Magnetic>
@@ -186,10 +202,14 @@ function Card({ member }: { member: (typeof CREW)[number] }) {
           {member.name}
         </h3>
         <p className="mt-2 text-sm leading-snug text-tenue">{t(member.bio)}</p>
-        <p className="mt-3 text-sm leading-snug text-tinta italic">{t(member.quote)}</p>
+        <p className="mt-3 text-sm leading-snug text-tinta italic">
+          {t(member.quote)}
+        </p>
         <p className="mt-3 flex items-baseline justify-between gap-2 border-t border-linea pt-2">
           <span className="etiqueta text-tenue">{t(member.stat.label)}</span>
-          <span className="cifra text-sm text-instrumento">{member.stat.value}</span>
+          <span className="cifra text-sm text-instrumento">
+            {member.stat.value}
+          </span>
         </p>
       </div>
     </article>

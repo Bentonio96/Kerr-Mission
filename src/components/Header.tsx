@@ -25,14 +25,23 @@ function SoundIcon({ on }: { on: boolean }) {
         <span
           key={i}
           className={`w-[2px] rounded-full bg-current ${on ? 'barra' : ''}`}
-          style={{ height: `${on ? h * 100 : 22}%`, animationDelay: `${i * 120}ms` }}
+          style={{
+            height: `${on ? h * 100 : 22}%`,
+            animationDelay: `${i * 120}ms`,
+          }}
         />
       ))}
     </span>
   )
 }
 
-export function SoundButton({ className = '', label = false }: { className?: string; label?: boolean }) {
+export function SoundButton({
+  className = '',
+  label = false,
+}: {
+  className?: string
+  label?: boolean
+}) {
   const { t } = useLanguage()
   const { on, toggle } = useSound()
   return (
@@ -43,7 +52,9 @@ export function SoundButton({ className = '', label = false }: { className?: str
       className={`inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center gap-2 rounded-full border px-3 transition-colors ${on ? 'border-acento text-acento' : 'border-linea text-tinta hover:border-tinta/60'} ${className}`}
     >
       <SoundIcon on={on} />
-      <span className={label ? 'etiqueta' : 'etiqueta sr-only sm:not-sr-only'}>{t(COPY.sound)}</span>
+      <span className={label ? 'etiqueta' : 'etiqueta sr-only sm:not-sr-only'}>
+        {t(COPY.sound)}
+      </span>
     </button>
   )
 }
@@ -76,7 +87,9 @@ function MotionToggle() {
           </>
         )}
       </span>
-      <span className="etiqueta sr-only xl:not-sr-only">{t(reduced ? COPY.motionOn : COPY.motionOff)}</span>
+      <span className="etiqueta sr-only xl:not-sr-only">
+        {t(reduced ? COPY.motionOn : COPY.motionOff)}
+      </span>
     </button>
   )
 }
@@ -105,21 +118,28 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-[90rem] items-center justify-between gap-3 px-4 md:px-8">
         <a
           href="#lanzamiento"
-          aria-label={t(COPY.home)}
           onClick={(event) => {
             event.preventDefault()
             scrollToTarget(0)
           }}
           className="flex min-h-11 items-center gap-2.5 text-tinta no-underline"
         >
-          <span aria-hidden="true" className="marca relative size-6 rounded-full" />
+          <span
+            aria-hidden="true"
+            className="marca relative size-6 rounded-full"
+          />
           <span className="display text-lg tracking-[0.18em]">KERR</span>
           <span className="etiqueta hidden text-tenue md:inline">KRR-01</span>
+          <span className="sr-only">{t(COPY.home)}</span>
         </a>
 
         <div className="flex items-center gap-1 sm:gap-2">
           <MotionToggle />
-          <div role="group" aria-label={t(COPY.language)} className="etiqueta flex items-center">
+          <div
+            role="group"
+            aria-label={t(COPY.language)}
+            className="etiqueta flex items-center"
+          >
             {LANGUAGES.map((code) => (
               <button
                 key={code}
@@ -130,7 +150,9 @@ export function Header() {
                 className={`min-h-11 min-w-11 cursor-pointer px-1.5 uppercase transition-colors ${lang === code ? 'text-acento underline decoration-1 underline-offset-4' : 'text-tenue hover:text-tinta'}`}
               >
                 <span aria-hidden="true">{code}</span>
-                <span className="sr-only">{code === 'es' ? 'Español' : 'English'}</span>
+                <span className="sr-only">
+                  {code === 'es' ? 'Español' : 'English'}
+                </span>
               </button>
             ))}
           </div>
