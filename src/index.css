@@ -1,0 +1,431 @@
+@import 'tailwindcss';
+
+/*
+ * «Horizonte». Space is black and the light comes from the hole: the disk's
+ * amber on one side, its blue shift on the other. The interface stays ivory
+ * on void, with one accent (`plasma`) for what you can touch, and the cool
+ * `corrimiento` for the instruments. Past the horizon the page turns to
+ * paper: the last chapter is light.
+ *
+ * Components use the scene roles (`fondo`, `tinta`, `tenue`, `linea`,
+ * `acento`, `instrumento`), which the light scene redefines.
+ */
+@theme {
+  --color-vacio: #04050a;
+  --color-marfil: #efe9dd;
+  --color-polvo: #a9a5b6;
+  --color-borde: #262634;
+  --color-plasma: #ffb35c;
+  --color-corrimiento: #9cc2ff;
+
+  --color-papel: #f2eee6;
+  --color-carbon: #0e0d13;
+  --color-grafito: #4d4956;
+  --color-hilo: #d3cdc1;
+  --color-brasa: #a3390a;
+  --color-cobalto: #2747b8;
+
+  --font-display: 'Anybody Variable', 'Anybody Respaldo', sans-serif;
+  --font-sans:
+    'Hanken Grotesk Variable', 'Hanken Respaldo', ui-sans-serif, sans-serif;
+  --font-mono: 'Martian Mono Variable', ui-monospace, monospace;
+
+  --ease-salida: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/*
+ * Metric-matched fallbacks: Arial scaled to each web font's average advance,
+ * so lines wrap the same before and after the swap.
+ */
+@font-face {
+  font-family: 'Hanken Respaldo';
+  src: local('Arial'), local('Helvetica'), local('Roboto');
+  size-adjust: 98%;
+}
+
+@font-face {
+  font-family: 'Anybody Respaldo';
+  src: local('Arial'), local('Helvetica'), local('Roboto');
+  size-adjust: 104%;
+}
+
+@theme inline {
+  --color-fondo: var(--fondo);
+  --color-tinta: var(--tinta);
+  --color-tenue: var(--tenue);
+  --color-linea: var(--linea);
+  --color-acento: var(--acento);
+  --color-instrumento: var(--instrumento);
+}
+
+:root {
+  --fondo: var(--color-vacio);
+  --tinta: var(--color-marfil);
+  --tenue: var(--color-polvo);
+  --linea: var(--color-borde);
+  --acento: var(--color-plasma);
+  --instrumento: var(--color-corrimiento);
+  color-scheme: dark;
+  interpolate-size: allow-keywords;
+}
+
+/* The light scene: the last chapter, and the whole page while it holds. */
+.escena-luz,
+html[data-escena='luz'] {
+  --fondo: var(--color-papel);
+  --tinta: var(--color-carbon);
+  --tenue: var(--color-grafito);
+  --linea: var(--color-hilo);
+  --acento: var(--color-brasa);
+  --instrumento: var(--color-cobalto);
+  color-scheme: light;
+}
+
+.escena-luz {
+  background-color: var(--fondo);
+  color: var(--tinta);
+}
+
+html {
+  overflow-x: clip;
+  background-color: var(--fondo);
+  transition: background-color 900ms var(--ease-salida);
+}
+
+html[data-reduced],
+html[data-reduced] * {
+  transition: none !important;
+}
+
+body {
+  background-color: var(--fondo);
+  color: var(--tinta);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+  transition:
+    background-color 900ms var(--ease-salida),
+    color 900ms var(--ease-salida);
+}
+
+::selection {
+  background: var(--acento);
+  color: var(--fondo);
+}
+
+:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Film grain over everything, so the black reads as space, not a screen. */
+.grano::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* The still the canvas fades in over (and the fallback without WebGL2). */
+.poster {
+  background: url('/poster.webp') 72% 50% / cover no-repeat;
+}
+
+@media (max-aspect-ratio: 9/10) {
+  .poster {
+    background-position: 50% 30%;
+  }
+}
+
+/* ---- Type roles -------------------------------------------------------- */
+
+/*
+ * Display type keeps a line-height above 0.9 and a little padding, so
+ * accents and descenders never touch an edge that clips.
+ */
+.display {
+  font-family: var(--font-display);
+  font-variation-settings:
+    'wght' 760,
+    'wdth' 112;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  padding-block: 0.08em;
+}
+
+.titulo {
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 1.5rem + 2.9vw, 4.6rem);
+  font-variation-settings:
+    'wght' 680,
+    'wdth' 100;
+  line-height: 1;
+  letter-spacing: -0.015em;
+  padding-block: 0.08em;
+  text-wrap: balance;
+}
+
+.etiqueta {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.cifra {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.prosa {
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+/* ---- Glass panels (the HUD, the crew cards, the fact cards) ------------- */
+
+.vidrio {
+  background: color-mix(in oklab, var(--fondo) 62%, transparent);
+  border: 1px solid color-mix(in oklab, var(--tinta) 14%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+/*
+ * A dark wash under the copy, so text over the brightest part of the disk
+ * keeps its contrast. Wide screens: from the left. Narrow: from the bottom.
+ */
+.velo {
+  background: linear-gradient(
+    90deg,
+    rgb(2 2 6 / 0.82) 0%,
+    rgb(2 2 6 / 0.55) 45%,
+    transparent 75%
+  );
+}
+
+@media (max-aspect-ratio: 9/10) {
+  .velo {
+    background: linear-gradient(
+      0deg,
+      rgb(2 2 6 / 0.9) 0%,
+      rgb(2 2 6 / 0.7) 45%,
+      transparent 80%
+    );
+  }
+}
+
+/* ---- Hero entrance: pure CSS, so it runs before any JS ------------------ */
+
+@keyframes subir {
+  from {
+    transform: translateY(0.6em);
+    opacity: 0;
+  }
+}
+
+.entrada > * {
+  animation: subir 1100ms var(--ease-salida) both;
+  animation-delay: calc(var(--i, 0) * 90ms + 200ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entrada > * {
+    animation: none;
+  }
+}
+
+html[data-reduced] .entrada > * {
+  animation: none;
+}
+
+/* ---- Glitch ------------------------------------------------------------ */
+
+/*
+ * Two tinted copies of the text (aria-hidden) that jump sideways for a few
+ * frames. They are offset, never masked: the real text underneath is always
+ * whole.
+ */
+.glitch {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-copia {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+
+.glitch-copia.r {
+  color: #ff4d6d;
+}
+
+.glitch-copia.c {
+  color: #4de1ff;
+}
+
+@keyframes glitch-r {
+  0%,
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+  10% {
+    opacity: 0.85;
+    transform: translate(-0.04em, 0.01em);
+  }
+  30% {
+    opacity: 0.7;
+    transform: translate(0.03em, -0.02em);
+  }
+  55% {
+    opacity: 0.85;
+    transform: translate(-0.02em, 0);
+  }
+  70% {
+    opacity: 0;
+  }
+}
+
+@keyframes glitch-c {
+  0%,
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+  15% {
+    opacity: 0.85;
+    transform: translate(0.04em, -0.01em);
+  }
+  35% {
+    opacity: 0.6;
+    transform: translate(-0.03em, 0.02em);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translate(0.02em, 0);
+  }
+  75% {
+    opacity: 0;
+  }
+}
+
+.glitch[data-on] .glitch-copia.r {
+  animation: glitch-r 420ms steps(1, end);
+}
+
+.glitch[data-on] .glitch-copia.c {
+  animation: glitch-c 420ms steps(1, end);
+}
+
+/* ---- The horizon: the interface stretches as you cross ------------------ */
+
+.deforma {
+  --d: 0;
+  transform: scaleY(calc(1 + var(--d) * 0.35)) skewX(calc(var(--d) * -7deg));
+  transform-origin: 50% 100%;
+  text-shadow:
+    calc(var(--d) * -5px) 0 rgb(255 77 109 / calc(var(--d) * 0.9)),
+    calc(var(--d) * 5px) 0 rgb(77 225 255 / calc(var(--d) * 0.9));
+}
+
+/* ---- Custom cursor ----------------------------------------------------- */
+
+html[data-cursor] body,
+html[data-cursor] a,
+html[data-cursor] button,
+html[data-cursor] [role='button'] {
+  cursor: none;
+}
+
+dialog::backdrop {
+  background: rgb(2 2 6 / 0.6);
+}
+
+/* ---- HUD --------------------------------------------------------------- */
+
+/* Martian Mono at its narrowest on phones, so three readings fit a row. */
+.estrecha {
+  font-variation-settings: 'wdth' 75;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 64rem) {
+  .estrecha {
+    font-variation-settings: 'wdth' 100;
+  }
+}
+
+@keyframes pulso {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.hud-pulso {
+  animation: pulso 1.6s ease-in-out infinite;
+}
+
+.hud[data-lost] .hud-perdida {
+  display: block;
+}
+
+.hud[data-lost] .hud-pulso {
+  animation-duration: 0.3s;
+}
+
+html[data-reduced] .hud-pulso {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hud-pulso {
+    animation: none;
+  }
+}
+
+/* ---- Header ------------------------------------------------------------ */
+
+/* The mark: Nadir in miniature, a black disk inside its glowing ring. */
+.marca {
+  background:
+    radial-gradient(circle, #000 0 38%, transparent 40%),
+    conic-gradient(from 200deg, #ffd9a0, #ff8a3d, #6b2a10, #ff8a3d, #fff1d6, #ffd9a0);
+  box-shadow: 0 0 14px rgb(255 160 80 / 0.45);
+}
+
+@keyframes barra {
+  50% {
+    transform: scaleY(0.35);
+  }
+}
+
+.barra {
+  transform-origin: bottom;
+  animation: barra 0.9s ease-in-out infinite;
+}
+
+html[data-reduced] .barra {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barra {
+    animation: none;
+  }
+}
+
+/* The HUD's labels run condensed, so each reading keeps to one line. */
+.hud .etiqueta {
+  font-variation-settings: 'wdth' 78;
+}
