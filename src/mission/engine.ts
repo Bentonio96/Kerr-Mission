@@ -44,7 +44,9 @@ function frozen(): number | null {
 
 function measure() {
   const sections = CHAPTERS.map((id) => document.getElementById(id))
-  tops = sections.map((el) => (el ? el.getBoundingClientRect().top + window.scrollY : 0))
+  tops = sections.map((el) =>
+    el ? el.getBoundingClientRect().top + window.scrollY : 0,
+  )
   heights = sections.map((el) => el?.offsetHeight ?? 1)
 }
 

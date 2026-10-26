@@ -60,10 +60,38 @@ interface Budget {
 
 const BUDGETS: Record<Tier, Budget> = {
   // One frame, drawn when the chapter changes: spend everything on it.
-  still: { scale: 1, maxScale: 1, minScale: 1, steps: 320, minSteps: 320, octaves: 5 },
-  high: { scale: 0.8, maxScale: 1, minScale: 0.4, steps: 220, minSteps: 100, octaves: 4 },
-  mid: { scale: 0.6, maxScale: 0.8, minScale: 0.35, steps: 170, minSteps: 90, octaves: 4 },
-  low: { scale: 0.45, maxScale: 0.6, minScale: 0.3, steps: 130, minSteps: 80, octaves: 3 },
+  still: {
+    scale: 1,
+    maxScale: 1,
+    minScale: 1,
+    steps: 320,
+    minSteps: 320,
+    octaves: 5,
+  },
+  high: {
+    scale: 0.8,
+    maxScale: 1,
+    minScale: 0.4,
+    steps: 220,
+    minSteps: 100,
+    octaves: 4,
+  },
+  mid: {
+    scale: 0.6,
+    maxScale: 0.8,
+    minScale: 0.35,
+    steps: 170,
+    minSteps: 90,
+    octaves: 4,
+  },
+  low: {
+    scale: 0.45,
+    maxScale: 0.6,
+    minScale: 0.3,
+    steps: 130,
+    minSteps: 80,
+    octaves: 3,
+  },
 }
 
 /** Read the GPU name where the browser allows it; guess the tier from it. */
@@ -128,14 +156,35 @@ function makeTarget(gl: WebGL2RenderingContext): Target {
   return { tex, fbo, w: 0, h: 0 }
 }
 
-function sizeTarget(gl: WebGL2RenderingContext, t: Target, w: number, h: number) {
+function sizeTarget(
+  gl: WebGL2RenderingContext,
+  t: Target,
+  w: number,
+  h: number,
+) {
   if (t.w === w && t.h === h) return
   t.w = w
   t.h = h
   gl.bindTexture(gl.TEXTURE_2D, t.tex)
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null)
+  gl.texImage2D(
+    gl.TEXTURE_2D,
+    0,
+    gl.RGBA8,
+    w,
+    h,
+    0,
+    gl.RGBA,
+    gl.UNSIGNED_BYTE,
+    null,
+  )
   gl.bindFramebuffer(gl.FRAMEBUFFER, t.fbo)
-  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t.tex, 0)
+  gl.framebufferTexture2D(
+    gl.FRAMEBUFFER,
+    gl.COLOR_ATTACHMENT0,
+    gl.TEXTURE_2D,
+    t.tex,
+    0,
+  )
 }
 
 export function createBlackHole(
@@ -167,18 +216,41 @@ export function createBlackHole(
   const vao = gl.createVertexArray()
   gl.bindVertexArray(vao)
   gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer())
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW)
+  gl.bufferData(
+    gl.ARRAY_BUFFER,
+    new Float32Array([-1, -1, 3, -1, -1, 3]),
+    gl.STATIC_DRAW,
+  )
   gl.enableVertexAttribArray(0)
   gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0)
 
   const us = uniforms(gl, scene, [
-    'uRes', 'uTime', 'uCamPos', 'uCamRight', 'uCamUp', 'uCamFwd', 'uFov',
-    'uOffset', 'uSteps', 'uOctaves', 'uSpin', 'uDisk', 'uExposure', 'uWarp',
-    'uWarpPhase', 'uDive', 'uPixel',
+    'uRes',
+    'uTime',
+    'uCamPos',
+    'uCamRight',
+    'uCamUp',
+    'uCamFwd',
+    'uFov',
+    'uOffset',
+    'uSteps',
+    'uOctaves',
+    'uSpin',
+    'uDisk',
+    'uExposure',
+    'uWarp',
+    'uWarpPhase',
+    'uDive',
+    'uPixel',
   ] as const)
   const ub = uniforms(gl, blur, ['uTex', 'uStep', 'uOut', 'uBright'] as const)
   const uc = uniforms(gl, composite, [
-    'uScene', 'uBloom', 'uRes', 'uAberration', 'uBloomGain', 'uTime',
+    'uScene',
+    'uBloom',
+    'uRes',
+    'uAberration',
+    'uBloomGain',
+    'uTime',
   ] as const)
 
   gl.useProgram(scene)
@@ -245,7 +317,13 @@ export function createBlackHole(
     }
   }
 
-  function blurPass(from: Target, to: Target, x: number, y: number, bright: boolean) {
+  function blurPass(
+    from: Target,
+    to: Target,
+    x: number,
+    y: number,
+    bright: boolean,
+  ) {
     gl!.bindFramebuffer(gl!.FRAMEBUFFER, to.fbo)
     gl!.viewport(0, 0, to.w, to.h)
     gl!.bindTexture(gl!.TEXTURE_2D, from.tex)
@@ -261,7 +339,11 @@ export function createBlackHole(
     const g = gl!
     const { camR, theta, phi, roll, yaw } = view
     const st = Math.sin(theta)
-    const pos = [camR * st * Math.cos(phi), camR * Math.cos(theta), camR * st * Math.sin(phi)] as const
+    const pos = [
+      camR * st * Math.cos(phi),
+      camR * Math.cos(theta),
+      camR * st * Math.sin(phi),
+    ] as const
     const look = [-pos[0] / camR, -pos[1] / camR, -pos[2] / camR] as const
     // right = look × (0, 1, 0), which has no y; up = right × fwd.
     const ll = Math.hypot(look[0], look[2]) || 1
@@ -270,7 +352,11 @@ export function createBlackHole(
     // Yaw: turn the view away from the hole, around the world's vertical.
     const cy = Math.cos(yaw)
     const sy = Math.sin(yaw)
-    const fwd = [look[0] * cy + lx * sy, look[1], look[2] * cy + lz * sy] as const
+    const fwd = [
+      look[0] * cy + lx * sy,
+      look[1],
+      look[2] * cy + lz * sy,
+    ] as const
     let rx = -fwd[2]
     let rz = fwd[0]
     const rl = Math.hypot(rx, rz) || 1
@@ -280,8 +366,16 @@ export function createBlackHole(
     // Roll the camera around its forward axis.
     const cr = Math.cos(roll)
     const sr = Math.sin(roll)
-    const right = [rx * cr + up[0] * sr, up[1] * sr, rz * cr + up[2] * sr] as const
-    const upR = [up[0] * cr - rx * sr, up[1] * cr, up[2] * cr - rz * sr] as const
+    const right = [
+      rx * cr + up[0] * sr,
+      up[1] * sr,
+      rz * cr + up[2] * sr,
+    ] as const
+    const upR = [
+      up[0] * cr - rx * sr,
+      up[1] * cr,
+      up[2] * cr - rz * sr,
+    ] as const
 
     // 1. The ray march.
     g.bindFramebuffer(g.FRAMEBUFFER, sceneTarget.fbo)

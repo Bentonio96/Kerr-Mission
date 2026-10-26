@@ -36,10 +36,13 @@ export function GlitchText({
     }
     const schedule = () => {
       const [min, max] = every
-      timer = window.setTimeout(() => {
-        if (visible && !document.hidden) fire()
-        schedule()
-      }, min + Math.random() * (max - min))
+      timer = window.setTimeout(
+        () => {
+          if (visible && !document.hidden) fire()
+          schedule()
+        },
+        min + Math.random() * (max - min),
+      )
     }
     const observer = new IntersectionObserver(([entry]) => {
       const was = visible

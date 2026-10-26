@@ -41,7 +41,10 @@ export const CREW: readonly CrewMember[] = [
       en: '“Light doesn’t lie; it only bends.”',
     },
     hue: 210,
-    stat: { value: '312', label: { es: 'Papers sobre Kerr', en: 'Papers on Kerr' } },
+    stat: {
+      value: '312',
+      label: { es: 'Papers sobre Kerr', en: 'Papers on Kerr' },
+    },
   },
   {
     id: 'arakawa',
@@ -56,7 +59,10 @@ export const CREW: readonly CrewMember[] = [
       en: '“Every engine is a deal with entropy.”',
     },
     hue: 350,
-    stat: { value: '11', label: { es: 'Motores rediseñados', en: 'Engines redesigned' } },
+    stat: {
+      value: '11',
+      label: { es: 'Motores rediseñados', en: 'Engines redesigned' },
+    },
   },
   {
     id: 'rahimi',
@@ -71,7 +77,10 @@ export const CREW: readonly CrewMember[] = [
       en: '“In here it is always seven in the evening.”',
     },
     hue: 160,
-    stat: { value: '5', label: { es: 'Relojes biológicos', en: 'Body clocks tracked' } },
+    stat: {
+      value: '5',
+      label: { es: 'Relojes biológicos', en: 'Body clocks tracked' },
+    },
   },
   {
     id: 'vela',
@@ -86,6 +95,9 @@ export const CREW: readonly CrewMember[] = [
       en: '“Heading stable. For now.”',
     },
     hue: 265,
-    stat: { value: '4 × 10⁷', label: { es: 'Rayos por segundo', en: 'Rays per second' } },
+    stat: {
+      value: '4 × 10⁷',
+      label: { es: 'Rayos por segundo', en: 'Rays per second' },
+    },
   },
 ]

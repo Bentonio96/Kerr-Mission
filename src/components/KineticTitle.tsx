@@ -91,7 +91,10 @@ export function KineticTitle({
   return (
     <h1 ref={root} className={`display ${className}`}>
       <span className="sr-only">{label}</span>
-      <span aria-hidden="true" className="inline-flex whitespace-nowrap uppercase">
+      <span
+        aria-hidden="true"
+        className="inline-flex whitespace-nowrap uppercase"
+      >
         {[...text].map((char, i) => (
           <span
             key={`${char}-${i}`}

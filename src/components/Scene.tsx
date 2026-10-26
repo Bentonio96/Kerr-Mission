@@ -46,7 +46,8 @@ export function Scene() {
       if (!hole) return
       active = hole
       setReady(true)
-      if (!reduced) window.addEventListener('pointermove', onPointer, { passive: true })
+      if (!reduced)
+        window.addEventListener('pointermove', onPointer, { passive: true })
 
       unsubscribe = mission.subscribe(({ t, time, dt }) => {
         const opacity = sceneOpacity(t)
@@ -78,7 +79,9 @@ export function Scene() {
     // Wait for the page to finish loading and go idle: the shader compile
     // should never compete with the first paint.
     const start = () => {
-      const idle = window.requestIdleCallback ?? ((fn: () => void) => window.setTimeout(fn, 200))
+      const idle =
+        window.requestIdleCallback ??
+        ((fn: () => void) => window.setTimeout(fn, 200))
       idle(() => void boot(), { timeout: 1500 })
     }
     if (document.readyState === 'complete') start()

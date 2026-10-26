@@ -55,8 +55,7 @@ export function photonOrbitRadius(a: number): number {
 
 /** Prograde innermost stable circular orbit (BPT 1972, eq. 2.21). */
 export function iscoRadius(a: number): number {
-  const z1 =
-    1 + Math.cbrt(1 - a * a) * (Math.cbrt(1 + a) + Math.cbrt(1 - a))
+  const z1 = 1 + Math.cbrt(1 - a * a) * (Math.cbrt(1 + a) + Math.cbrt(1 - a))
   const z2 = Math.sqrt(3 * a * a + z1 * z1)
   return 3 + z2 - Math.sqrt((3 - z1) * (3 + z1 + 2 * z2))
 }
@@ -88,8 +87,7 @@ export function orbitalSpeed(r: number, a: number): number | null {
   const delta = r * r - 2 * r + a * a
   if (delta <= 0 || r <= photonOrbitRadius(a)) return null
   const v =
-    (r * r - 2 * a * Math.sqrt(r) + a * a) /
-    (Math.sqrt(delta) * (r ** 1.5 + a))
+    (r * r - 2 * a * Math.sqrt(r) + a * a) / (Math.sqrt(delta) * (r ** 1.5 + a))
   return v < 1 ? v : null
 }
 
@@ -108,7 +106,10 @@ export function orbitalDilation(r: number, a: number): number | null {
  * ship pass at v = √(1 − α²), and dt/dτ = γ/α = 1/α². Both reach their limit
  * (c and ∞) exactly at the horizon.
  */
-export function freeFall(r: number, a: number): { speed: number; dilation: number } | null {
+export function freeFall(
+  r: number,
+  a: number,
+): { speed: number; dilation: number } | null {
   const alpha = lapse(r, a)
   if (alpha <= 0) return null
   return { speed: Math.sqrt(1 - alpha * alpha), dilation: 1 / (alpha * alpha) }

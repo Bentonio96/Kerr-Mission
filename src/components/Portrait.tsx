@@ -32,7 +32,11 @@ export function Portrait({ member }: { member: CrewMember }) {
   const ai = id === 'vela'
 
   return (
-    <svg viewBox="0 0 240 200" aria-hidden="true" className="block h-auto w-full">
+    <svg
+      viewBox="0 0 240 200"
+      aria-hidden="true"
+      className="block h-auto w-full"
+    >
       <defs>
         <radialGradient id={`fondo-${id}`} cx="50%" cy="35%" r="75%">
           <stop offset="0" stopColor={deep} />
@@ -73,7 +77,14 @@ export function Portrait({ member }: { member: CrewMember }) {
       <g transform={`rotate(${tilt.toFixed(1)} 120 100)`}>
         {/* Helmet shell */}
         <circle cx="120" cy="98" r="62" fill={`url(#casco-${id})`} />
-        <circle cx="120" cy="98" r="62" fill="none" stroke="#000" strokeOpacity="0.25" />
+        <circle
+          cx="120"
+          cy="98"
+          r="62"
+          fill="none"
+          stroke="#000"
+          strokeOpacity="0.25"
+        />
         {/* Visor, with Nadir reflected in it */}
         <ellipse cx="120" cy="96" rx="46" ry="38" fill={`url(#visor-${id})`} />
         <g clipPath={`url(#recorte-${id})`}>
@@ -90,7 +101,14 @@ export function Portrait({ member }: { member: CrewMember }) {
           />
           <circle cx="128" cy="100" r="20" fill={`url(#halo-${id})`} />
           <circle cx="128" cy="100" r="10.5" fill="#000" />
-          <path d="M92 70 Q120 58 150 66" stroke="#fff" strokeOpacity="0.35" strokeWidth="5" fill="none" strokeLinecap="round" />
+          <path
+            d="M92 70 Q120 58 150 66"
+            stroke="#fff"
+            strokeOpacity="0.35"
+            strokeWidth="5"
+            fill="none"
+            strokeLinecap="round"
+          />
           {ai &&
             Array.from({ length: 7 }, (_, i) => (
               <line
@@ -104,9 +122,25 @@ export function Portrait({ member }: { member: CrewMember }) {
               />
             ))}
         </g>
-        <ellipse cx="120" cy="96" rx="46" ry="38" fill="none" stroke="#000" strokeWidth="3" strokeOpacity="0.6" />
+        <ellipse
+          cx="120"
+          cy="96"
+          rx="46"
+          ry="38"
+          fill="none"
+          stroke="#000"
+          strokeWidth="3"
+          strokeOpacity="0.6"
+        />
         {/* Mission patch */}
-        <circle cx="166" cy="140" r="9" fill="#05050a" stroke={glow} strokeWidth="1.5" />
+        <circle
+          cx="166"
+          cy="140"
+          r="9"
+          fill="#05050a"
+          stroke={glow}
+          strokeWidth="1.5"
+        />
         <circle cx="166" cy="140" r="3" fill={glow} />
       </g>
     </svg>

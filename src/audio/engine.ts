@@ -107,7 +107,11 @@ export function createVoice(): Voice | null {
       const t = now()
       const near = Math.min(Math.max(proximity, 0), 1)
       const live = 1 - beyond
-      droneFilter.frequency.setTargetAtTime(80 + near ** 2 * 900 + warp * 300, t, 0.3)
+      droneFilter.frequency.setTargetAtTime(
+        80 + near ** 2 * 900 + warp * 300,
+        t,
+        0.3,
+      )
       droneGain.gain.setTargetAtTime((0.12 + near * 0.22) * live, t, 0.3)
       drones[2]?.frequency.setTargetAtTime(20.6 + near * 6, t, 0.5)
       rumbleGain.gain.setTargetAtTime(near ** 1.5 * 0.9 * live, t, 0.3)
