@@ -17,9 +17,9 @@
  *   - a drone and rumble underneath, a rush of noise during the jump.
  *
  * The other side:
- *   - a choir of soft "ah" voices (detuned saws through vowel formants) on a
- *     wide major chord, breathing slowly;
- *   - small bells, far apart, in a much longer hall. No clock, no drone.
+ *   - only a choir: soft "ah" voices (detuned saws through vowel formants,
+ *     darkened) on a wide major chord, breathing slowly in a much longer
+ *     hall. No clock, no drone, nothing struck.
  */
 
 export interface Cue {
@@ -73,7 +73,6 @@ const FLUTE = [
 
 // The other side: A major with an added ninth, spread wide.
 const CHOIR = [45, 57, 61, 64, 71, 76] as const
-const BELLS = [81, 83, 85, 88, 90, 93] as const
 // Formants of an open "ah": frequency, width (Q) and level.
 const VOWEL = [
   [730, 8, 1],
@@ -153,7 +152,6 @@ export function createVoice(): Voice | null {
   const figureBus = bus(0.8)
   const tickBus = bus(0.3)
   const choirBus = bus(1.6, heaven)
-  const bellBus = bus(2.2, heaven)
 
   // ---- drone, rumble and rush --------------------------------------------
 
@@ -201,14 +199,19 @@ export function createVoice(): Voice | null {
   // ---- the choir (always running, silent until the other side) ------------
 
   const breath = ctx.createOscillator()
-  breath.frequency.value = 0.08
+  breath.frequency.value = 0.05
   const breathDepth = ctx.createGain()
-  breathDepth.gain.value = 0.25
+  breathDepth.gain.value = 0.18
   breath.connect(breathDepth)
   const choirSwell = ctx.createGain()
   choirSwell.gain.value = 0.75
   breathDepth.connect(choirSwell.gain)
-  choirSwell.connect(choirBus)
+  // Darkened, so the voices sit back like a distant choir, never bright.
+  const choirShade = ctx.createBiquadFilter()
+  choirShade.type = 'lowpass'
+  choirShade.frequency.value = 1700
+  choirShade.Q.value = 0.5
+  choirSwell.connect(choirShade).connect(choirBus)
   breath.start()
 
   const vowel = VOWEL.map(([freq, q, level]) => {
@@ -222,9 +225,9 @@ export function createVoice(): Voice | null {
     return band
   })
   const vibrato = ctx.createOscillator()
-  vibrato.frequency.value = 4.6
+  vibrato.frequency.value = 4.2
   const vibratoDepth = ctx.createGain()
-  vibratoDepth.gain.value = 7
+  vibratoDepth.gain.value = 3
   vibrato.connect(vibratoDepth)
   vibrato.start()
   const singers = CHOIR.flatMap((note) =>
@@ -277,27 +280,6 @@ export function createVoice(): Voice | null {
     }
   }
 
-  /** A small bell: inharmonic partials with a long, soft decay. */
-  function bell(note: number, at: number) {
-    const base = midi(note)
-    for (const [ratio, amp, decay] of [
-      [1, 0.5, 4.5],
-      [2.76, 0.18, 2.4],
-      [5.4, 0.08, 1.2],
-    ] as const) {
-      const osc = ctx.createOscillator()
-      osc.type = 'sine'
-      osc.frequency.value = base * ratio
-      const env = ctx.createGain()
-      env.gain.setValueAtTime(0, at)
-      env.gain.linearRampToValueAtTime(amp, at + 0.01)
-      env.gain.exponentialRampToValueAtTime(0.0005, at + decay)
-      osc.connect(env).connect(bellBus)
-      osc.start(at)
-      osc.stop(at + decay + 0.05)
-    }
-  }
-
   const tickNoise = noiseBuffer(ctx, 0.05, false)
   function tick(at: number, accent: boolean) {
     const src = ctx.createBufferSource()
@@ -332,7 +314,6 @@ export function createVoice(): Voice | null {
   let tickCount = 0
   let nextStep = 0
   let step = 0
-  let nextBell = 0
   let wasAcross = false
   let timer = 0
 
@@ -378,13 +359,6 @@ export function createVoice(): Voice | null {
       step++
       nextStep += eighth
     }
-
-    // On the other side, a bell every few seconds.
-    if (!across) nextBell = horizon + 1.5
-    while (nextBell < horizon) {
-      bell(BELLS[Math.floor(Math.random() * BELLS.length)]!, nextBell)
-      nextBell += 2.8 + Math.random() * 3.5
-    }
   }
 
   return {
@@ -395,7 +369,7 @@ export function createVoice(): Voice | null {
       const near = Math.min(Math.max(cue.proximity, 0), 1)
       const live = 1 - cue.beyond
       // One long crescendo to the horizon, then cut dead at the crossing.
-      const swell = 0.3 + near * 0.55 + cue.dive * 0.6 + cue.warp * 0.2
+      const swell = 0.3 + near * 0.5 + cue.dive * 0.4 + cue.warp * 0.2
       const cut = cue.beyond > 0.05 ? 0.05 : 0.6
       organBus.gain.setTargetAtTime(swell * live, t, cut)
       figureBus.gain.setTargetAtTime(
@@ -415,8 +389,7 @@ export function createVoice(): Voice | null {
       rushFilter.frequency.setTargetAtTime(300 + cue.warp * 2600, t, 0.2)
       rushGain.gain.setTargetAtTime(cue.warp * 0.35, t, 0.2)
       // The choir rises slowly out of the silence.
-      choirBus.gain.setTargetAtTime(cue.beyond * 0.5, t, 2.5)
-      bellBus.gain.setTargetAtTime(cue.beyond * 0.35, t, 1.5)
+      choirBus.gain.setTargetAtTime(cue.beyond * 0.75, t, 4)
     },
     setEnabled(on) {
       enabled = on
@@ -425,7 +398,7 @@ export function createVoice(): Voice | null {
       master.gain.setTargetAtTime(on ? 0.75 : 0, t, on ? 0.8 : 0.15)
       if (on) {
         void ctx.resume()
-        nextBar = nextTick = nextStep = nextBell = now() + 0.1
+        nextBar = nextTick = nextStep = now() + 0.1
         window.clearInterval(timer)
         timer = window.setInterval(schedule, 50)
         schedule()

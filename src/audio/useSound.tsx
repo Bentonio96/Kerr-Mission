@@ -10,7 +10,7 @@ import {
 } from 'react'
 import { mission } from '../mission/engine'
 import { telemetry } from '../mission/telemetry'
-import { diveAt, logRadius, warpAt } from '../mission/timeline'
+import { LIGHT_T, diveAt, logRadius, warpAt } from '../mission/timeline'
 import { createVoice, type Voice } from './engine'
 
 interface Sound {
@@ -37,7 +37,7 @@ export function SoundProvider({ children }: { children: ReactNode }) {
       if (!v || !enabled.current) return
       const clamp = (x: number) => Math.min(Math.max(x, 0), 1)
       const proximity = 1 - clamp(logRadius(t) / 6)
-      const beyond = clamp((t - 5.92) / 0.2)
+      const beyond = clamp((t - LIGHT_T) / 0.15)
       v.update({
         proximity: Math.max(proximity, diveAt(t)),
         warp: warpAt(t),
