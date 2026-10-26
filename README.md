@@ -51,10 +51,14 @@ formulas are not.
 
 Around it: a HUD with live telemetry and a radar of the ship against the
 horizon, the photon orbit and the ergosphere; a chapter rail; a custom
-cursor; magnetic buttons; and **optional sound**, synthesised with Web Audio
-(a low drone that opens up as you close in, a rush during the jump, silence
-at the horizon, one chord on the other side). Sound only starts from its
-button, never on its own.
+cursor; magnetic buttons; and **an optional score**, synthesised live with
+Web Audio, original, in the spirit of the big space-organ film scores: organ
+pipes (additive partials) playing a slow progression through a synthetic
+hall and swelling on the way down; a clock tick whose spacing stretches with
+the time dilation on the HUD until it stops at the horizon; an ostinato that
+enters in the ergosphere and speeds up through the dive; a drone, a rumble
+and a rush of noise during the jump; then silence, and one bright chord on
+the other side. It only starts from its button, never on its own.
 
 ---
 
@@ -67,7 +71,7 @@ button, never on its own.
 | Styling | Tailwind CSS v4, tokens in `src/index.css` |
 | Black hole | Raw WebGL2: a ray-marching shader plus bloom and composite passes, lazy-loaded (9 KB gzip) |
 | Scroll and motion | GSAP 3 + ScrollTrigger, Lenis, one shared `requestAnimationFrame` |
-| Sound | Web Audio, synthesised, nothing to download |
+| Sound | Web Audio: organ, clock and ostinato synthesised live, nothing to download |
 | Checks | Vitest, `@axe-core/playwright`, Lighthouse, a clipping check, oxlint, Prettier |
 
 ---
