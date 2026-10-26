@@ -332,8 +332,9 @@ html[data-reduced] .entrada > * {
 
 .deforma {
   --d: 0;
-  transform: scaleY(calc(1 + var(--d) * 0.12)) skewX(calc(var(--d) * -7deg));
-  transform-origin: 50% 100%;
+  --sesgo: -3deg;
+  transform: scaleY(calc(1 + var(--d) * 0.08)) skewX(calc(var(--d) * var(--sesgo)));
+  transform-origin: 50% 55%;
   text-shadow:
     calc(var(--d) * -5px) 0 rgb(255 77 109 / calc(var(--d) * 0.9)),
     calc(var(--d) * 5px) 0 rgb(77 225 255 / calc(var(--d) * 0.9));
@@ -374,6 +375,21 @@ dialog::backdrop {
 
 .hud-pulso {
   animation: pulso 1.6s ease-in-out infinite;
+}
+
+.hud {
+  --v: 0;
+  /* Phones: the strip sinks away, clear of the copy above it. */
+  translate: 0 calc(var(--v) * 3rem);
+  filter: blur(calc(var(--v) * 14px));
+}
+
+@media (min-width: 64rem) {
+  /* Wide screens: the panel is pulled up and stretched into the white. */
+  .hud {
+    translate: 0 calc(var(--v) * -6rem);
+    scale: calc(1 - var(--v) * 0.25) calc(1 + var(--v) * 0.9);
+  }
 }
 
 .hud[data-lost] .hud-perdida {
@@ -441,4 +457,10 @@ html[data-reduced] .barra {
 /* Copy over the scene: a soft dark halo keeps it legible over the disk. */
 .sobre-escena {
   text-shadow: 0 1px 14px rgb(2 2 6 / 0.85);
+}
+
+@media (min-width: 48rem) {
+  .deforma {
+    --sesgo: -7deg;
+  }
 }

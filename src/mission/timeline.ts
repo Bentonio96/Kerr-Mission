@@ -56,8 +56,8 @@ const camR = track([
   [4.1, 5.6],
   [4.6, 3.9],
   [5.0, 3.0],
-  [5.55, 1.7],
-  [5.95, 1.04],
+  [5.35, 1.7],
+  [5.62, 1.04],
 ])
 
 const theta = track([
@@ -68,7 +68,7 @@ const theta = track([
   [3.95, 1.43],
   [4.6, 1.49],
   [5.0, 1.44],
-  [5.9, 1.2],
+  [5.62, 1.2],
 ])
 
 // The ship swings around the hole once it is close.
@@ -82,7 +82,7 @@ const roll = track([
   [4, 0],
   [4.5, 0.16],
   [5, -0.04],
-  [5.9, 0.3],
+  [5.62, 0.3],
 ])
 
 // Near the hole its shadow fills most of the sky; look past its edge.
@@ -90,8 +90,8 @@ const yaw = track([
   [4.0, 0],
   [4.6, 0.22],
   [5.0, 0.35],
-  [5.5, 0.8],
-  [5.95, 1.15],
+  [5.35, 0.8],
+  [5.62, 1.15],
 ])
 
 const warp = track([
@@ -103,7 +103,7 @@ const warp = track([
 
 const dive = track([
   [5.05, 0],
-  [5.95, 1],
+  [5.62, 1],
 ])
 
 const exposure = track([
@@ -116,7 +116,7 @@ const exposure = track([
   [3.9, 0.7],
   [4.3, 0.42],
   [5.2, 0.36],
-  [5.75, 0.5],
+  [5.5, 0.5],
 ])
 
 const fov = track([
@@ -124,7 +124,7 @@ const fov = track([
   [3.0, 0.95],
   [4.3, 1.1],
   [5.0, 1.15],
-  [5.95, 1.55],
+  [5.62, 1.55],
 ])
 
 // Where the hole sits on screen (in units of screen height): beside the text
@@ -149,10 +149,18 @@ const offYNarrow = track([
   [4.6, 0],
 ])
 
-/** Canvas opacity: the last chapter is light, and the canvas bows out. */
+/**
+ * The moment the ship is through: the dive ends in white (the shader's
+ * flash) while the horizon panel is still pinned, and at this t the page
+ * turns to paper under it. The canvas then bows out over a ground of the
+ * same colour, so the light chapter rises onto paper, not onto space.
+ */
+export const LIGHT_T = 5.6
+
+/** Canvas opacity: gone once the page has turned to paper. */
 export const sceneOpacity = track([
-  [5.86, 1],
-  [5.98, 0],
+  [LIGHT_T - 0.02, 1],
+  [LIGHT_T + 0.06, 0],
 ])
 
 export function view(
@@ -190,7 +198,7 @@ export const logRadius = track([
   [4.05, Math.log10(2.3)],
   [4.6, Math.log10(1.96)],
   [5.0, Math.log10(1.95)],
-  [5.9, Math.log10(1.3)],
+  [5.6, Math.log10(1.3)],
 ])
 
 /** The ship's own speed while cruising, as a fraction of c. */

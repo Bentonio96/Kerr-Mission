@@ -12,13 +12,18 @@ import {
   schwarzschildRadiusKm,
 } from '../mission/physics'
 import { telemetry, type Telemetry } from '../mission/telemetry'
-import { diveAt, sceneOpacity } from '../mission/timeline'
+import { LIGHT_T, diveAt } from '../mission/timeline'
 import type { Lang } from '../types'
 import { sceneQuality } from './Scene'
 
 const A = NADIR.spin
 const RS_KM = schwarzschildRadiusKm(NADIR.solarMasses)
 const RADAR = 46
+
+const smooth = (x: number) => {
+  const c = Math.min(Math.max(x, 0), 1)
+  return c * c * (3 - 2 * c)
+}
 
 /** Radar radius for a distance in M: log-compressed so every ring shows. */
 function radarRadius(r: number): number {
@@ -73,10 +78,13 @@ export function Hud() {
     return mission.subscribe(({ t: mt, time, dt }) => {
       const box = root.current
       if (!box) return
-      const visible = sceneOpacity(mt)
-      box.style.opacity = String(visible)
-      box.style.visibility = visible < 0.01 ? 'hidden' : ''
+      // The instruments go with the ship: stretched by the dive, then pulled
+      // up and dissolved into the white just before the page turns to paper.
+      const vanish = smooth((mt - (LIGHT_T - 0.14)) / 0.13)
+      box.style.opacity = String(1 - vanish)
+      box.style.visibility = vanish > 0.99 ? 'hidden' : ''
       box.style.setProperty('--d', String(diveAt(mt) ** 2))
+      box.style.setProperty('--v', vanish.toFixed(3))
       // Text at 20 Hz is plenty, and spares layout. Still frames (dt 0, the
       // reduced build) always update.
       if (dt > 0 && frame++ % 3 !== 0 && last) return

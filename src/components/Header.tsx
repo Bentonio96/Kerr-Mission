@@ -4,10 +4,17 @@ import { CHAPTER_NAMES, COPY } from '../data/copy'
 import { useReducedMotion } from '../hooks/useMediaQuery'
 import { useLanguage } from '../i18n/useLanguage'
 import { mission } from '../mission/engine'
-import { CHAPTERS } from '../mission/timeline'
+import { CHAPTERS, LIGHT_T } from '../mission/timeline'
 import { scrollToTarget } from '../lib/scroll'
 import { LANGUAGES } from '../types'
 import { Magnetic } from './Magnetic'
+
+/** True once the ship is through and the page has turned to paper. */
+function useLight(): boolean {
+  const [light, setLight] = useState(false)
+  useEffect(() => mission.subscribe(({ t }) => setLight(t >= LIGHT_T)), [])
+  return light
+}
 
 /** Jump to a chapter and hand focus to its heading. */
 export function goTo(id: string) {
@@ -96,9 +103,7 @@ function MotionToggle() {
 
 export function Header() {
   const { t, lang, setLang } = useLanguage()
-  const [chapter, setChapter] = useState(0)
-  useEffect(() => mission.onChapter(setChapter), [])
-  const light = chapter === CHAPTERS.length - 1
+  const light = useLight()
 
   return (
     <header
@@ -173,11 +178,12 @@ export function ChapterRail() {
   const { t } = useLanguage()
   const [chapter, setChapter] = useState(0)
   useEffect(() => mission.onChapter(setChapter), [])
+  const light = useLight()
 
   return (
     <nav
       aria-label={t(COPY.chapters)}
-      className={`fixed top-1/2 left-6 z-40 hidden -translate-y-1/2 transition-opacity duration-500 xl:block ${chapter === CHAPTERS.length - 1 ? 'opacity-0' : ''}`}
+      className={`fixed top-1/2 left-6 z-40 hidden -translate-y-1/2 transition-opacity duration-500 xl:block ${light ? 'invisible opacity-0' : ''}`}
     >
       <ol className="flex flex-col gap-0.5">
         {CHAPTERS.map((id, i) => {

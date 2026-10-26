@@ -12,7 +12,7 @@ import { useLanguage } from '../i18n/useLanguage'
 import { MQ, gsap, useGSAP } from '../lib/gsap'
 import { scrollToTarget } from '../lib/scroll'
 import { mission } from '../mission/engine'
-import { diveAt } from '../mission/timeline'
+import { LIGHT_T, diveAt } from '../mission/timeline'
 import { CrewCarousel } from './CrewCarousel'
 import { GlitchText } from './GlitchText'
 import { SoundButton, goTo } from './Header'
@@ -343,7 +343,18 @@ export function Horizon() {
   useEffect(() => {
     if (reduced) return
     let last = -1
+    let lastFade = -1
     return mission.subscribe(({ t: mt }) => {
+      // The whole panel (copy and its dark wash) fades into the flash, so
+      // nothing dark is left on screen when the page turns to paper.
+      const panel = box.current?.parentElement?.parentElement
+      const x = Math.min(Math.max((mt - (LIGHT_T - 0.1)) / 0.09, 0), 1)
+      const fade = Math.round(x * x * (3 - 2 * x) * 1000) / 1000
+      if (panel && fade !== lastFade) {
+        lastFade = fade
+        panel.style.opacity = String(1 - fade)
+        panel.style.filter = fade > 0 ? `blur(${(fade * 10).toFixed(1)}px)` : ''
+      }
       const d = Math.round(diveAt(mt) ** 1.4 * 1000) / 1000
       if (d === last) return
       last = d

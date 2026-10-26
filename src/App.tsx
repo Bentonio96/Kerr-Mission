@@ -17,19 +17,23 @@ import { SmoothScroll } from './components/SmoothScroll'
 import { useReducedMotion } from './hooks/useMediaQuery'
 import { LanguageProvider } from './i18n/LanguageProvider'
 import { mission } from './mission/engine'
-import { CHAPTERS } from './mission/timeline'
+import { LIGHT_T } from './mission/timeline'
 
 /**
- * Starts the mission clock, and turns the whole page to paper once the ship
- * is through the horizon (the last chapter is the light one).
+ * Starts the mission clock, and turns the whole page to paper the moment
+ * the ship is through the horizon (LIGHT_T, in the white of the flash).
  */
 function useMission() {
   const reduced = useReducedMotion()
   useEffect(() => {
     mission.start(reduced)
     const html = document.documentElement
-    const off = mission.onChapter((chapter) => {
-      if (chapter === CHAPTERS.length - 1) html.dataset.escena = 'luz'
+    let light = false
+    const off = mission.subscribe(({ t }) => {
+      const next = t >= LIGHT_T
+      if (next === light) return
+      light = next
+      if (next) html.dataset.escena = 'luz'
       else delete html.dataset.escena
     })
     return () => {
