@@ -67,6 +67,70 @@ export function SoundButton({
 }
 
 /**
+ * The sound is on from the start, so the first thing the page says is where
+ * to turn it off: a small bubble under the button, pointing at it. It goes
+ * away on its own a few seconds after the sound actually starts, when the
+ * visitor uses the button, or when they close it.
+ */
+function SoundHint() {
+  const { t } = useLanguage()
+  const { on, waiting } = useSound()
+  const [open, setOpen] = useState(false)
+  const [done, setDone] = useState(false)
+
+  useEffect(() => {
+    // Intentional: shown only after hydration, never in the prerender.
+    // eslint-disable-next-line react/set-state-in-effect
+    if (!done) setOpen(on)
+    if (!on) setDone(true)
+  }, [on, done])
+
+  useEffect(() => {
+    if (!open || waiting) return
+    const timer = window.setTimeout(() => {
+      setOpen(false)
+      setDone(true)
+    }, 7000)
+    return () => window.clearTimeout(timer)
+  }, [open, waiting])
+
+  if (!open || done) return null
+  return (
+    <div
+      role="status"
+      className="aviso vidrio absolute top-full right-0 mt-3 flex w-[min(16rem,calc(100vw-2rem))] items-start gap-2 rounded-2xl py-2.5 pr-1 pl-4 text-left"
+    >
+      <span
+        aria-hidden="true"
+        className="absolute -top-1.5 right-5 size-3 rotate-45 border-t border-l border-tinta/15 bg-fondo"
+      />
+      <p className="flex-1 pt-1.5">
+        <span className="flex items-center gap-1.5 text-sm font-medium text-tinta">
+          <span aria-hidden="true">↑</span>
+          {t(COPY.hintMute)}
+        </span>
+        {waiting && (
+          <span className="mt-1 block text-xs leading-snug text-tenue">
+            {t(COPY.hintWaiting)}
+          </span>
+        )}
+      </p>
+      <button
+        type="button"
+        onClick={() => {
+          setOpen(false)
+          setDone(true)
+        }}
+        className="flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full text-tenue transition-colors hover:text-tinta"
+      >
+        <span aria-hidden="true">×</span>
+        <span className="sr-only">{t(COPY.hintClose)}</span>
+      </button>
+    </div>
+  )
+}
+
+/**
  * Everything that moves on its own stops with this switch, which reloads
  * into the reduced-motion build: WCAG 2.2.2 asks for a way to pause it.
  */
@@ -161,9 +225,12 @@ export function Header() {
               </button>
             ))}
           </div>
-          <Magnetic>
-            <SoundButton />
-          </Magnetic>
+          <div className="relative">
+            <Magnetic>
+              <SoundButton />
+            </Magnetic>
+            <SoundHint />
+          </div>
         </div>
       </div>
     </header>

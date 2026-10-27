@@ -512,3 +512,26 @@ html[data-reduced] .barra {
 .rango:focus-visible {
   outline-offset: 2px;
 }
+
+/* ---- The sound notice ---------------------------------------------------- */
+
+@keyframes aviso {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.aviso {
+  animation: aviso 600ms var(--ease-salida) 400ms both;
+}
+
+html[data-reduced] .aviso {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aviso {
+    animation: none;
+  }
+}

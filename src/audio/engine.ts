@@ -1,7 +1,7 @@
 /**
- * The score of the mission, synthesised with Web Audio: nothing to download,
- * and nothing plays until the visitor presses the sound button (the context
- * is created inside that click, so no browser has to unlock it).
+ * The score of the mission, synthesised with Web Audio: nothing to download.
+ * It is on by default, but browsers only let a page make sound after the
+ * visitor's first click, tap or key press, so it starts there at the latest.
  *
  * An original piece in the spirit of the big space-organ film scores. The
  * flight is a cathedral organ; the other side is a choir.
@@ -39,6 +39,12 @@ export interface Cue {
 export interface Voice {
   update(cue: Cue): void
   setEnabled(on: boolean): void
+  /** Try to start the context; browsers only allow it after a gesture. */
+  unlock(): void
+  /** Whether the browser is actually letting it play. */
+  running(): boolean
+  /** Called whenever the context starts or stops. */
+  onState(fn: () => void): void
   close(): void
 }
 
@@ -391,13 +397,20 @@ export function createVoice(): Voice | null {
       // The choir rises slowly out of the silence.
       choirBus.gain.setTargetAtTime(cue.beyond * 0.75, t, 4)
     },
+    unlock() {
+      if (ctx.state !== 'running' && enabled) ctx.resume().catch(() => {})
+    },
+    running: () => ctx.state === 'running',
+    onState(fn) {
+      ctx.addEventListener('statechange', fn)
+    },
     setEnabled(on) {
       enabled = on
       const t = now()
       master.gain.cancelScheduledValues(t)
       master.gain.setTargetAtTime(on ? 0.75 : 0, t, on ? 0.8 : 0.15)
       if (on) {
-        void ctx.resume()
+        ctx.resume().catch(() => {})
         nextBar = nextTick = nextStep = now() + 0.1
         window.clearInterval(timer)
         timer = window.setInterval(schedule, 50)
@@ -405,14 +418,14 @@ export function createVoice(): Voice | null {
         this.update(cue)
       } else {
         window.clearInterval(timer)
-        window.setTimeout(() => !enabled && void ctx.suspend(), 900)
+        window.setTimeout(() => !enabled && ctx.suspend().catch(() => {}), 900)
       }
     },
     close() {
       window.clearInterval(timer)
       ;[...drones, ...singers, breath, vibrato].forEach((osc) => osc.stop())
       noise.stop()
-      void ctx.close()
+      ctx.close().catch(() => {})
     },
   }
 }

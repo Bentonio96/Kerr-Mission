@@ -28,6 +28,12 @@ export const COPY = {
   soundOn: { es: 'Activar sonido', en: 'Turn sound on' },
   soundOff: { es: 'Silenciar', en: 'Mute' },
   sound: { es: 'Sonido', en: 'Sound' },
+  hintMute: { es: 'Silenciar sonido aquí', en: 'Mute sound here' },
+  hintWaiting: {
+    es: 'Suena desde tu primer clic o toque.',
+    en: 'It starts with your first click or tap.',
+  },
+  hintClose: { es: 'Cerrar aviso', en: 'Close notice' },
   motionOff: { es: 'Pausar movimiento', en: 'Pause motion' },
   motionOn: { es: 'Reanudar movimiento', en: 'Resume motion' },
   motionShort: { es: 'Movimiento', en: 'Motion' },
