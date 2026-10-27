@@ -80,29 +80,64 @@ export const COPY = {
       en: 'Five people travel 26,000 light years to Nadir, a black hole of ten million suns spinning at 94 % of what physics allows. This is the log of the journey: to its horizon, and a little beyond.',
     },
     start: { es: 'Iniciar descenso', en: 'Begin descent' },
-    crew: { es: 'Conocer a la tripulación', en: 'Meet the crew' },
-    crewShort: { es: 'Tripulación', en: 'The crew' },
+    clock: { es: 'Probar el reloj', en: 'Try the clock' },
+    clockShort: { es: 'El reloj', en: 'The clock' },
     note: {
       es: 'Misión ficticia. La física es real, simplificada.',
       en: 'A fictional mission. The physics is real, simplified.',
     },
     scroll: { es: 'Desliza para despegar', en: 'Scroll to lift off' },
-    clock: { es: 'Tiempo de misión', en: 'Mission time' },
+    elapsed: { es: 'Tiempo de misión', en: 'Mission time' },
   },
 
-  crew: {
-    kicker: { es: '02 · Tripulación', en: '02 · Crew' },
-    title: { es: 'Cinco a bordo del Umbral', en: 'Five aboard the Umbral' },
-    lead: {
-      es: 'Una nave de 140 metros, un anillo que gira para dar peso y una regla: nadie cruza solo.',
-      en: 'A 140-metre ship, a spinning ring for weight, and one rule: nobody crosses alone.',
+  clock: {
+    kicker: { es: '02 · Reloj', en: '02 · Clock' },
+    title: {
+      es: 'Cuánto cuesta una hora aquí',
+      en: 'What an hour costs down here',
     },
-    carousel: { es: 'Tripulación', en: 'Crew' },
-    slide: { es: 'tarjeta', en: 'card' },
-    prev: { es: 'Anterior', en: 'Previous' },
-    next: { es: 'Siguiente', en: 'Next' },
-    of: { es: '{n} de {total}', en: '{n} of {total}' },
-    drag: { es: 'Arrastra', en: 'Drag' },
+    lead: {
+      es: 'Cerca de Nadir el tiempo corre más lento para quien está ahí. Elige qué tan cerca orbitar y cuánto quedarte, y mira cuánto pasa en la Tierra mientras tanto. Es la misma fórmula del HUD.',
+      en: 'Near Nadir, time runs slower for whoever is there. Choose how close to orbit and how long to stay, and see how much passes on Earth meanwhile. It is the same formula as the HUD.',
+    },
+    radius: { es: 'Radio de la órbita', en: 'Orbit radius' },
+    stay: { es: 'Tiempo a bordo', en: 'Time aboard' },
+    stays: [
+      { hours: 1, label: { es: '1 hora', en: '1 hour' } },
+      { hours: 24, label: { es: '1 día', en: '1 day' } },
+      { hours: 8766, label: { es: '1 año', en: '1 year' } },
+    ],
+    earth: { es: 'En la Tierra pasan', en: 'On Earth, meanwhile' },
+    aboard: { es: 'A bordo', en: 'Aboard' },
+    onEarth: { es: 'En la Tierra', en: 'On Earth' },
+    factor: { es: 'Factor', en: 'Factor' },
+    speed: { es: 'Velocidad orbital', en: 'Orbital speed' },
+    clocks: {
+      es: 'Dos relojes: a bordo y en la Tierra. El de la Tierra gira {x} veces más rápido.',
+      en: 'Two clocks: aboard and on Earth. Earth’s turns {x} times faster.',
+    },
+    presets: { es: 'Atajos', en: 'Shortcuts' },
+    umbral: { es: 'Órbita del Umbral', en: 'The Umbral’s orbit' },
+    isco: { es: 'Última órbita estable', en: 'Last stable orbit' },
+    far: { es: 'Lejos', en: 'Far out' },
+    zones: {
+      far: { es: 'Lejos del agujero', en: 'Far from the hole' },
+      near: {
+        es: 'Cerca de la última órbita estable',
+        en: 'Near the last stable orbit',
+      },
+      ergo: { es: 'Dentro de la ergosfera', en: 'Inside the ergosphere' },
+      edge: {
+        es: 'Al borde de la órbita de fotones',
+        en: 'At the edge of the photon orbit',
+      },
+    },
+    units: {
+      minute: { es: ['minuto', 'minutos'], en: ['minute', 'minutes'] },
+      hour: { es: ['hora', 'horas'], en: ['hour', 'hours'] },
+      day: { es: ['día', 'días'], en: ['day', 'days'] },
+      year: { es: ['año', 'años'], en: ['year', 'years'] },
+    },
   },
 
   warp: {
@@ -252,7 +287,7 @@ export const COPY = {
 
 export const CHAPTER_NAMES: readonly Localized[] = [
   { es: 'Lanzamiento', en: 'Launch' },
-  { es: 'Tripulación', en: 'Crew' },
+  { es: 'Reloj', en: 'Clock' },
   { es: 'Salto', en: 'Jump' },
   { es: 'Aproximación', en: 'Approach' },
   { es: 'Ergosfera', en: 'Ergosphere' },

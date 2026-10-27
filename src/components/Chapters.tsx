@@ -13,11 +13,11 @@ import { MQ, gsap, useGSAP } from '../lib/gsap'
 import { scrollToTarget } from '../lib/scroll'
 import { mission } from '../mission/engine'
 import { LIGHT_T, diveAt } from '../mission/timeline'
-import { CrewCarousel } from './CrewCarousel'
 import { GlitchText } from './GlitchText'
 import { SoundButton, goTo } from './Header'
 import { KineticTitle } from './KineticTitle'
 import { Magnetic } from './Magnetic'
+import { TimeClock } from './TimeClock'
 
 const REPO = 'https://github.com/Bentonio96/Kerr-Mission'
 
@@ -119,7 +119,7 @@ function Chapter({
         />
         <div
           ref={inner}
-          className={`sobre-escena relative mx-auto flex w-full max-w-[90rem] flex-col justify-end px-4 pt-20 pb-24 md:px-8 lg:justify-center lg:pt-24 lg:pb-20 xl:pl-52 ${flow ? '' : 'lg:pr-[26.5rem]'}`}
+          className={`sobre-escena relative mx-auto flex w-full max-w-[90rem] flex-col px-4 pt-20 pb-24 md:px-8 lg:justify-center lg:pt-24 lg:pb-20 xl:pl-52 ${flow ? 'justify-start' : 'justify-end lg:pr-[26.5rem]'}`}
         >
           {children}
         </div>
@@ -212,7 +212,7 @@ function MissionClock() {
   const text = `T+ ${pad(Math.floor(seconds / 3600))}:${pad(Math.floor(seconds / 60) % 60)}:${pad(seconds % 60)}`
   return (
     <p className="etiqueta text-tenue">
-      {t(COPY.launch.clock)} <span className="cifra text-tinta">{text}</span>
+      {t(COPY.launch.elapsed)} <span className="cifra text-tinta">{text}</span>
     </p>
   )
 }
@@ -261,18 +261,18 @@ export function Launch() {
           </Magnetic>
           <Magnetic>
             <a
-              href="#tripulacion"
+              href="#reloj"
               onClick={(event) => {
                 event.preventDefault()
-                goTo('tripulacion')
+                goTo('reloj')
               }}
               className="inline-flex min-h-12 items-center rounded-full border border-linea px-5 text-tinta sm:px-6 no-underline transition-colors hover:border-acento hover:text-acento"
             >
               <span className="sm:hidden" aria-hidden="true">
-                {t(COPY.launch.crewShort)}
+                {t(COPY.launch.clockShort)}
               </span>
               <span className="sr-only sm:not-sr-only">
-                {t(COPY.launch.crew)}
+                {t(COPY.launch.clock)}
               </span>
             </a>
           </Magnetic>
@@ -289,27 +289,30 @@ export function Launch() {
   )
 }
 
-export function Crew() {
+export function Clock() {
   const { t } = useLanguage()
   return (
-    <Chapter id="tripulacion" screens={1} flow>
-      <div className="mx-auto w-full max-w-5xl text-center">
-        <div className="flex justify-center">
-          <Kicker>{t(COPY.crew.kicker)}</Kicker>
+    <Chapter id="reloj" screens={1} flow>
+      <div className="w-full max-w-6xl">
+        <div className="max-w-2xl">
+          <Kicker>{t(COPY.clock.kicker)}</Kicker>
+          <div data-revela="">
+            <GlitchText
+              as="h2"
+              id="reloj-titulo"
+              text={t(COPY.clock.title)}
+              className="titulo mt-4 max-w-[18ch]"
+            />
+          </div>
+          <p
+            data-revela=""
+            className="prosa mt-4 max-w-xl text-tinta/85 md:mt-5"
+          >
+            {t(COPY.clock.lead)}
+          </p>
         </div>
-        <div data-revela="">
-          <GlitchText
-            as="h2"
-            id="tripulacion-titulo"
-            text={t(COPY.crew.title)}
-            className="titulo mt-4"
-          />
-        </div>
-        <p data-revela="" className="prosa mx-auto mt-4 max-w-lg text-tinta/85">
-          {t(COPY.crew.lead)}
-        </p>
-        <div data-revela="" className="mt-8">
-          <CrewCarousel />
+        <div data-revela="" className="mt-8 md:mt-10">
+          <TimeClock />
         </div>
       </div>
     </Chapter>

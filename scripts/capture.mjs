@@ -18,13 +18,13 @@ const PHONE = { width: 390, height: 844 }
 
 const SHOTS = [
   { file: '01-lanzamiento.jpg', viewport: DESKTOP, section: 'lanzamiento' },
-  { file: '02-tripulacion.jpg', viewport: DESKTOP, section: 'tripulacion', offset: 0.12 },
+  { file: '02-reloj.jpg', viewport: DESKTOP, section: 'reloj', offset: 0.1 },
   { file: '03-salto.jpg', viewport: DESKTOP, section: 'salto', offset: 0.25 },
   { file: '04-aproximacion.jpg', viewport: DESKTOP, section: 'aproximacion', offset: 0.3 },
   { file: '05-ergosfera.jpg', viewport: DESKTOP, section: 'ergosfera', offset: 0.3 },
   { file: '06-horizonte.jpg', viewport: DESKTOP, section: 'horizonte', offset: 0.42 },
   { file: '07-mas-alla.jpg', viewport: DESKTOP, section: 'mas-alla', offset: 0.05 },
-  { file: '08-movimiento-reducido.jpg', viewport: DESKTOP, section: 'tripulacion', offset: 0.1, query: '?reduced=1' },
+  { file: '08-movimiento-reducido.jpg', viewport: DESKTOP, section: 'reloj', offset: 0.05, query: '?reduced=1' },
   { file: '09-movil.jpg', viewport: PHONE, section: 'lanzamiento', scale: 2, mobile: true },
   { file: '10-movil-salto.jpg', viewport: PHONE, section: 'salto', offset: 0.25, scale: 2, mobile: true },
   { file: '11-english.jpg', viewport: DESKTOP, section: 'ergosfera', offset: 0.3, lang: 'en' },

@@ -189,7 +189,7 @@ body {
   text-wrap: pretty;
 }
 
-/* ---- Glass panels (the HUD, the crew cards, the fact cards) ------------- */
+/* ---- Glass panels (the HUD, the clock, the fact cards) ------------------ */
 
 .vidrio {
   background: color-mix(in oklab, var(--fondo) 62%, transparent);
@@ -333,7 +333,8 @@ html[data-reduced] .entrada > * {
 .deforma {
   --d: 0;
   --sesgo: -3deg;
-  transform: scaleY(calc(1 + var(--d) * 0.08)) skewX(calc(var(--d) * var(--sesgo)));
+  transform: scaleY(calc(1 + var(--d) * 0.08))
+    skewX(calc(var(--d) * var(--sesgo)));
   transform-origin: 50% 55%;
   text-shadow:
     calc(var(--d) * -5px) 0 rgb(255 77 109 / calc(var(--d) * 0.9)),
@@ -463,4 +464,51 @@ html[data-reduced] .barra {
   .deforma {
     --sesgo: -7deg;
   }
+}
+
+/* ---- The clock's orbit slider ------------------------------------------ */
+
+/* Cool far out, hot near the hole: the track runs from instrument blue to
+   the disk's amber, as the slider moves inwards. */
+.rango {
+  appearance: none;
+  height: 2.75rem;
+  background: transparent;
+  cursor: pointer;
+}
+
+.rango::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--instrumento), var(--acento));
+}
+
+.rango::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--instrumento), var(--acento));
+}
+
+.rango::-webkit-slider-thumb {
+  appearance: none;
+  margin-top: -10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #000;
+  border: 2px solid var(--acento);
+  box-shadow: 0 0 18px 2px color-mix(in oklab, var(--acento) 70%, transparent);
+}
+
+.rango::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #000;
+  border: 2px solid var(--acento);
+  box-shadow: 0 0 18px 2px color-mix(in oklab, var(--acento) 70%, transparent);
+}
+
+.rango:focus-visible {
+  outline-offset: 2px;
 }

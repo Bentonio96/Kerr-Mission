@@ -3,7 +3,7 @@ import { SoundProvider } from './audio/useSound'
 import {
   Approach,
   Beyond,
-  Crew,
+  Clock,
   Ergosphere,
   Horizon,
   Launch,
@@ -53,7 +53,7 @@ function Page() {
       <ChapterRail />
       <main id="contenido" tabIndex={-1} className="outline-none">
         <Launch />
-        <Crew />
+        <Clock />
         <Warp />
         <Approach />
         <Ergosphere />

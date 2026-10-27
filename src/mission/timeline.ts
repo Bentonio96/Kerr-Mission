@@ -8,7 +8,7 @@ import type { View } from '../webgl/blackhole'
  */
 export const CHAPTERS = [
   'lanzamiento',
-  'tripulacion',
+  'reloj',
   'salto',
   'aproximacion',
   'ergosfera',

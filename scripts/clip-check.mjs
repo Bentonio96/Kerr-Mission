@@ -13,9 +13,6 @@
  *  - text under the fixed header or the HUD while its panel is pinned
  *    (or at the very end of the page, where nothing can scroll on).
  *
- * Side cards of the crew carousel are aria-hidden and leave the screen by
- * design; the front card is checked like any other text.
- *
  * Usage: npm run dev, then node scripts/clip-check.mjs [url] [out-dir] [query]
  * Uses the installed Google Chrome.
  */
@@ -37,7 +34,7 @@ const VIEWPORTS = [
 
 const CHAPTERS = [
   'lanzamiento',
-  'tripulacion',
+  'reloj',
   'salto',
   'aproximacion',
   'ergosfera',
