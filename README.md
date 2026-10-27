@@ -3,13 +3,15 @@
 The site of a fictional crewed mission into a spinning black hole. Five
 people, one ship (the *Umbral*) and Nadir: ten million suns, spinning at 94 %
 of what physics allows. The scroll is the flight, in seven chapters: launch,
-crew, a relativistic jump, the approach, an orbit inside the ergosphere, the
-crossing of the event horizon, and what is on the other side.
+a clock for time dilation, a relativistic jump, the approach, an orbit inside the ergosphere, the
+crossing of the event horizon (the HUD and the copy stretch and dissolve
+into the white, and the page turns to paper under it), and what is on the
+other side.
 
 The black hole is rendered live in WebGL2: every pixel traces a ray of light
 bending around the hole. The numbers on the HUD come from real formulas.
 
-Kerr, Nadir, the Umbral and its crew are invented, and the page says so. The
+Kerr, Nadir and the Umbral are invented, and the page says so. The
 formulas are not.
 
 ![Launch](docs/01-lanzamiento.jpg)
@@ -35,14 +37,14 @@ formulas are not.
 | Chapter | What happens |
 |---|---|
 | 01 Launch | Nadir in the distance, its disk lensed above and below the shadow. A wordmark whose letters swell on Anybody's width and weight axes near the cursor and stutter now and then. The mission clock starts. |
-| 02 Crew | Five crew members on a carousel with depth: drag it, use the arrows or the keys. Each portrait is drawn: a helmet whose visor reflects Nadir in that person's colour. |
+| 02 Clock | What an hour costs down here: pick an orbit on a logarithmic slider (20 M down to the edge of the photon orbit) and a stay aboard, and see how much time passes on Earth, from the same formula as the HUD. Two dials run side by side; Earth's turns as many times faster. |
 | 03 Jump | At 0.9999995 c: star streaks rushing past, blue ahead and red at the edge, with chromatic aberration. γ = 1,000. |
 | 04 Approach | From a speck to a wall of light. The far side of the disk shows over the top of the shadow; the photon ring hugs it. |
 | 05 Ergosphere | The camera swings around the hole inside the last stable orbit, the disk sweeping through the frame. |
 | 06 Horizon | Everything stretches: the picture twists and pulls, the copy shears and splits into colour, the last words widen on the font's width axis, the HUD goes to ∞ and loses the signal. Then white. |
 | 07 Beyond | The page turns to paper: the mission log, the formulas, and a way back to the launch. |
 
-![Crew](docs/02-tripulacion.jpg)
+![Clock](docs/02-reloj.jpg)
 ![Jump](docs/03-salto.jpg)
 ![Approach](docs/04-aproximacion.jpg)
 ![Ergosphere](docs/05-ergosfera.jpg)
@@ -51,15 +53,22 @@ formulas are not.
 
 Around it: a HUD with live telemetry and a radar of the ship against the
 horizon, the photon orbit and the ergosphere; a chapter rail; a custom
-cursor; magnetic buttons; and **an optional score**, synthesised live with
-Web Audio, original, in the spirit of the big space-organ film scores. The
-flight is a cathedral organ (additive ranks from a 16' pedal to mixtures,
-in a long synthetic nave) holding a pedal A under slow chords; a clock whose
+cursor; magnetic buttons; and **a score**, synthesised live with Web
+Audio, original, in the spirit of the big space-organ film scores. The
+flight is a cathedral organ (additive ranks from a 16' pedal to mixtures, in
+a long synthetic nave) holding a pedal A under slow chords; a clock whose
 tick stretches with the time dilation on the HUD and stops at the horizon; a
 rocking two-note figure that enters in the ergosphere and speeds up through
 the dive; one long crescendo, cut dead at the crossing. The other side is
-calm: a choir of soft "ah" voices (detuned saws through vowel formants) on a
-wide major chord, and small bells far apart in a much longer hall. It only starts from its button, never on its own.
+calm: only a darkened choir of soft "ah" voices on a wide major chord, in a
+much longer hall.
+
+The score is **on by default**. Browsers only let a page make sound after a
+first click, tap or key press (scrolling does not count), so it tries to
+start on load and otherwise starts on that first gesture, anywhere on the
+page. A bubble under the sound button says where to mute it, and a mute is
+remembered for the next visit (WCAG 1.4.2: the control is the first thing
+on the page).
 
 ---
 
@@ -195,7 +204,7 @@ What makes that hold:
 - **Reduced motion is a real version.** With `prefers-reduced-motion`, or
   `?reduced=1`: no smooth scroll, no cursor, no glitch, no pinning. The black
   hole renders one still per chapter, at full quality, when the chapter
-  changes. The crew is a grid. The HUD updates per chapter.
+  changes. The clock's dials hold still. The HUD updates per chapter.
 
   ![Reduced motion](docs/08-movimiento-reducido.jpg)
 
